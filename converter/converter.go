@@ -9,14 +9,14 @@ type Converter struct {
 
 	registeredPlugins []string
 
-	preRenderHandlers  prioritizedSlice[HandlePreRenderFunc]
-	renderHandlers     prioritizedSlice[HandleRenderFunc]
-	postRenderHandlers prioritizedSlice[HandlePostRenderFunc]
+	preRenderHandlers  handlerList[HandlePreRenderFunc]
+	renderHandlers     handlerList[HandleRenderFunc]
+	postRenderHandlers handlerList[HandlePostRenderFunc]
 
-	textTransformHandlers prioritizedSlice[HandleTextTransformFunc]
+	textTransformHandlers handlerList[HandleTextTransformFunc]
 
 	markdownChars    map[rune]interface{}
-	unEscapeHandlers prioritizedSlice[HandleUnEscapeFunc]
+	unEscapeHandlers handlerList[HandleUnEscapeFunc]
 
 	tagTypes map[string]prioritizedSlice[tagType]
 

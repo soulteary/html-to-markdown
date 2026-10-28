@@ -39,17 +39,10 @@ func (r *register) PreRenderer(fn HandlePreRenderFunc, priority int) {
 	defer r.conv.m.Unlock()
 
 	handler := prioritized(fn, priority)
-	r.conv.preRenderHandlers = append(r.conv.preRenderHandlers, handler)
+	r.conv.preRenderHandlers.add(handler)
 }
 func (conv *Converter) getPreRenderHandlers() prioritizedSlice[HandlePreRenderFunc] {
-	conv.m.RLock()
-	defer conv.m.RUnlock()
-
-	handlers := make(prioritizedSlice[HandlePreRenderFunc], len(conv.preRenderHandlers))
-	copy(handlers, conv.preRenderHandlers)
-	handlers.Sort()
-
-	return handlers
+	return sortedHandlers(&conv.m, &conv.preRenderHandlers)
 }
 
 // - - - - - - - - - - - - - Render - - - - - - - - - - - - - //
@@ -69,7 +62,7 @@ func (r *register) Renderer(fn HandleRenderFunc, priority int) {
 	defer r.conv.m.Unlock()
 
 	handler := prioritized(fn, priority)
-	r.conv.renderHandlers = append(r.conv.renderHandlers, handler)
+	r.conv.renderHandlers.add(handler)
 }
 
 // RendererFor registers a renderer for a specific tag (e.g. "div").
@@ -89,14 +82,7 @@ func (r *register) RendererFor(tagName string, tagType tagType, renderFn HandleR
 }
 
 func (conv *Converter) getRenderHandlers() prioritizedSlice[HandleRenderFunc] {
-	conv.m.RLock()
-	defer conv.m.RUnlock()
-
-	handlers := make(prioritizedSlice[HandleRenderFunc], len(conv.renderHandlers))
-	copy(handlers, conv.renderHandlers)
-	handlers.Sort()
-
-	return handlers
+	return sortedHandlers(&conv.m, &conv.renderHandlers)
 }
 
 // - - - - - - - - - - - - - Post Render - - - - - - - - - - - - - //
@@ -108,17 +94,10 @@ func (r *register) PostRenderer(fn HandlePostRenderFunc, priority int) {
 	defer r.conv.m.Unlock()
 
 	handler := prioritized(fn, priority)
-	r.conv.postRenderHandlers = append(r.conv.postRenderHandlers, handler)
+	r.conv.postRenderHandlers.add(handler)
 }
 func (conv *Converter) getPostRenderHandlers() prioritizedSlice[HandlePostRenderFunc] {
-	conv.m.RLock()
-	defer conv.m.RUnlock()
-
-	handlers := make(prioritizedSlice[HandlePostRenderFunc], len(conv.postRenderHandlers))
-	copy(handlers, conv.postRenderHandlers)
-	handlers.Sort()
-
-	return handlers
+	return sortedHandlers(&conv.m, &conv.postRenderHandlers)
 }
 
 // - - - - - - - - - - - - - Text - - - - - - - - - - - - - //
@@ -130,17 +109,10 @@ func (r *register) TextTransformer(fn HandleTextTransformFunc, priority int) {
 	defer r.conv.m.Unlock()
 
 	handler := prioritized(fn, priority)
-	r.conv.textTransformHandlers = append(r.conv.textTransformHandlers, handler)
+	r.conv.textTransformHandlers.add(handler)
 }
 func (conv *Converter) getTextTransformHandlers() prioritizedSlice[HandleTextTransformFunc] {
-	conv.m.RLock()
-	defer conv.m.RUnlock()
-
-	handlers := make(prioritizedSlice[HandleTextTransformFunc], len(conv.textTransformHandlers))
-	copy(handlers, conv.textTransformHandlers)
-	handlers.Sort()
-
-	return handlers
+	return sortedHandlers(&conv.m, &conv.textTransformHandlers)
 }
 
 // - - - - - - - - - - - - - Escaping - - - - - - - - - - - - - //
@@ -153,13 +125,6 @@ func (r *register) EscapedChar(chars ...rune) {
 		r.conv.markdownChars[char] = struct{}{}
 	}
 }
-func (conv *Converter) checkIsEscapedChar(r rune) bool {
-	conv.m.RLock()
-	defer conv.m.RUnlock()
-
-	_, ok := conv.markdownChars[r]
-	return ok
-}
 
 type HandleUnEscapeFunc func(chars []byte, index int) int
 
@@ -168,17 +133,10 @@ func (r *register) UnEscaper(fn HandleUnEscapeFunc, priority int) {
 	defer r.conv.m.Unlock()
 
 	handler := prioritized(fn, priority)
-	r.conv.unEscapeHandlers = append(r.conv.unEscapeHandlers, handler)
+	r.conv.unEscapeHandlers.add(handler)
 }
 func (conv *Converter) getUnEscapeHandlers() prioritizedSlice[HandleUnEscapeFunc] {
-	conv.m.RLock()
-	defer conv.m.RUnlock()
-
-	handlers := make(prioritizedSlice[HandleUnEscapeFunc], len(conv.unEscapeHandlers))
-	copy(handlers, conv.unEscapeHandlers)
-	handlers.Sort()
-
-	return handlers
+	return sortedHandlers(&conv.m, &conv.unEscapeHandlers)
 }
 
 // - - - - - - - - - - - - - Tag Type - - - - - - - - - - - - - //
@@ -193,12 +151,16 @@ const (
 	TagTypeRemove tagType = "remove"
 )
 
-func (r *register) TagType(tagName string, tagType tagType, priority int) {
+func (r *register) TagType(tagName string, kind tagType, priority int) {
 	r.conv.m.Lock()
 	defer r.conv.m.Unlock()
 
-	val := prioritized(tagType, priority)
-	r.conv.tagTypes[tagName] = append(r.conv.tagTypes[tagName], val)
+	val := prioritized(kind, priority)
+	// Publish a new sorted slice so readers never sort shared storage.
+	types := append(prioritizedSlice[tagType](nil), r.conv.tagTypes[tagName]...)
+	types = append(types, val)
+	types.Sort()
+	r.conv.tagTypes[tagName] = types
 }
 func (conv *Converter) getTagType(tagName string) (tagType, bool) {
 	conv.m.RLock()
@@ -215,7 +177,6 @@ func (conv *Converter) getTagType(tagName string) (tagType, bool) {
 		return "", false
 	}
 
-	types.Sort()
 	firstType := types[0].Value
 
 	return firstType, true

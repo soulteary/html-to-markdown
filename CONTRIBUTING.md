@@ -1,6 +1,6 @@
 # Contributing
 
-Use Go 1.25 or newer. The module path is
+Use Go 1.27.3 or newer. The module path is
 `github.com/soulteary/html-to-markdown/v2`.
 
 ## Repository layout
