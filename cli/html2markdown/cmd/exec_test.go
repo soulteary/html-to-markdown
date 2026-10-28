@@ -272,7 +272,7 @@ func TestExecute(t *testing.T) {
 				modeStderr: modePipe,
 
 				inputStdin: []byte("<strong>text</strong>"),
-				// Someone accidentally used underscores instead of dashes
+				// Misspelled flags fail without suggesting a replacement.
 				inputArgs: []string{"html2markdown", "--opt_strong_delimiter="},
 			},
 		},
