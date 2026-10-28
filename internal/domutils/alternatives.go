@@ -105,8 +105,11 @@ func LeafBlockAlternatives(ctx context.Context, doc *html.Node) {
 			isInsideInline = true
 		}
 
-		for child := node.FirstChild; child != nil; child = child.NextSibling {
-			defer finder(child, isInsideLeafBlock, isInsideInline)
+		// Preserve the deferred walk's reverse order and skip inserted siblings.
+		for child := node.LastChild; child != nil; {
+			previous := child.PrevSibling
+			finder(child, isInsideLeafBlock, isInsideInline)
+			child = previous
 		}
 	}
 	finder(doc, false, false)

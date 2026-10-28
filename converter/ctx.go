@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/soulteary/html-to-markdown/v2/internal/domutils"
 	"golang.org/x/net/html"
 )
 
@@ -169,7 +168,29 @@ func (c *converterContext) RenderNodes(ctx Context, w Writer, nodes ...*html.Nod
 	c.conv.handleRenderNodes(ctx, w, nodes...)
 }
 func (c *converterContext) RenderChildNodes(ctx Context, w Writer, n *html.Node) {
-	c.conv.handleRenderNodes(ctx, w, domutils.AllChildNodes(n)...)
+	// Keep a snapshot: renderers may detach, insert, or reorder siblings.
+	// Most elements fit in the local buffer. Count only the remaining children
+	// of wide elements so their snapshot needs one exact-size heap allocation.
+	var storage [8]*html.Node
+	children := storage[:0]
+	child := n.FirstChild
+	for child != nil && len(children) < len(storage) {
+		children = append(children, child)
+		child = child.NextSibling
+	}
+	if child != nil {
+		count := len(children)
+		for remaining := child; remaining != nil; remaining = remaining.NextSibling {
+			count++
+		}
+		snapshot := make([]*html.Node, len(children), count)
+		copy(snapshot, children)
+		children = snapshot
+		for ; child != nil; child = child.NextSibling {
+			children = append(children, child)
+		}
+	}
+	c.conv.handleRenderNodes(ctx, w, children...)
 }
 
 func (c *converterContext) GetTagType(tagName string) (tagType, bool) {
