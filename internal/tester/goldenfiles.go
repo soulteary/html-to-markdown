@@ -1,7 +1,6 @@
 package tester
 
 import (
-	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -9,7 +8,7 @@ import (
 	"testing"
 )
 
-var enableRoundTrip = flag.Bool("round", false, "enable the round trip testing")
+type ConvertFunc func(html []byte) (markdown []byte, err error)
 
 const suffixInputFile = ".in.html"
 const suffixOutputFile = ".out.md"
@@ -39,7 +38,7 @@ func getInputFiles(pathOfFolder string) ([]string, error) {
 	return names, nil
 }
 
-func GoldenFiles(t *testing.T, convert ConvertFunc, roundTripConvert ConvertFunc) {
+func GoldenFiles(t *testing.T, convert ConvertFunc) {
 	pathOfFolder := filepath.Join("./testdata", strings.TrimPrefix(t.Name(), "Test"))
 	runs, err := getInputFiles(pathOfFolder)
 	if err != nil {
@@ -65,23 +64,6 @@ func GoldenFiles(t *testing.T, convert ConvertFunc, roundTripConvert ConvertFunc
 			}
 
 			AssertGolden(t, filepath.Join(pathOfFolder, run+suffixOutputFile), output)
-
-			// - - - - - - - Round Trip Test - - - - - - - //
-			if *enableRoundTrip {
-				_, err := RoundTrip(run, input, roundTripConvert)
-				if err != nil {
-					t.Error(err)
-
-					// - - - //
-
-					// TODO: clear folder to override earlier runs
-					// TODO: enable writing using command line
-					// err2 := res.WriteToFiles("./.tmp/roundtrip")
-					// if err2 != nil {
-					// 	t.Error(err2)
-					// }
-				}
-			}
 		})
 	}
 }
