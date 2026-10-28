@@ -5,6 +5,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
 )
@@ -26,7 +27,7 @@ func TestCheckGolden(t *testing.T) {
 		}
 		changed := append(append([]byte{}, content...), 'x')
 		err := checkGolden(path, changed, false)
-		if err == nil || !strings.Contains(err.Error(), path) || !strings.Contains(err.Error(), "Expected:") || !strings.Contains(err.Error(), "Got:") {
+		if err == nil || !strings.Contains(err.Error(), strconv.Quote(path)) || !strings.Contains(err.Error(), "Expected:") || !strings.Contains(err.Error(), "Got:") {
 			t.Fatalf("missing mismatch diagnostic: %v", err)
 		}
 		stored, err := os.ReadFile(path)
@@ -42,6 +43,16 @@ func TestCheckGolden(t *testing.T) {
 		if err := checkGolden(path, changed, false); err != nil {
 			t.Fatal(err)
 		}
+	}
+}
+
+func TestCheckGoldenMissingPathDiagnostic(t *testing.T) {
+	// A Windows-style path must remain recognizable after diagnostic escaping,
+	// including when this test runs on Unix.
+	path := filepath.Join(t.TempDir(), `C:\fixtures\missing.golden`)
+	err := checkGolden(path, nil, false)
+	if err == nil || !strings.Contains(err.Error(), strconv.Quote(path)) {
+		t.Fatalf("missing quoted fixture path: %v", err)
 	}
 }
 

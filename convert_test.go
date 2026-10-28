@@ -7,10 +7,10 @@ import (
 	"sync"
 	"testing"
 
-	htmltomarkdown "github.com/JohannesKaufmann/html-to-markdown/v2"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/base"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/commonmark"
+	htmltomarkdown "github.com/soulteary/html-to-markdown/v2"
+	"github.com/soulteary/html-to-markdown/v2/converter"
+	"github.com/soulteary/html-to-markdown/v2/plugin/base"
+	"github.com/soulteary/html-to-markdown/v2/plugin/commonmark"
 	"golang.org/x/net/html"
 )
 
@@ -23,6 +23,16 @@ func ExampleConvertString() {
 	}
 	fmt.Println(markdown)
 	// Output: **Bold Text**
+}
+
+func ExampleConvertReader() {
+	reader := strings.NewReader(`<p>Read <strong>HTML</strong> from any io.Reader.</p>`)
+	markdown, err := htmltomarkdown.ConvertReader(reader)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(markdown))
+	// Output: Read **HTML** from any io.Reader.
 }
 
 func ExampleWithDomain() {

@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/tester"
+	"github.com/soulteary/html-to-markdown/v2/internal/tester"
 	"golang.org/x/net/html"
 )
 

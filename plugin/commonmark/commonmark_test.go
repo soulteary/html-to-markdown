@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/tester"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/base"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/commonmark"
+	"github.com/soulteary/html-to-markdown/v2/converter"
+	"github.com/soulteary/html-to-markdown/v2/internal/tester"
+	"github.com/soulteary/html-to-markdown/v2/plugin/base"
+	"github.com/soulteary/html-to-markdown/v2/plugin/commonmark"
 )
 
 func TestGoldenFiles(t *testing.T) {

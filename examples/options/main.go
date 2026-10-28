@@ -4,28 +4,28 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/base"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/commonmark"
+	"github.com/soulteary/html-to-markdown/v2/converter"
+	"github.com/soulteary/html-to-markdown/v2/plugin/base"
+	"github.com/soulteary/html-to-markdown/v2/plugin/commonmark"
 )
 
-func main() {
-	input := `<strong>Bold Text</strong>`
+const exampleHTML = `<p><strong>Custom formatting</strong></p><ul><li>First</li><li>Second</li></ul>`
 
-	conv := converter.NewConverter(
-		converter.WithPlugins(
-			base.NewBasePlugin(),
-			commonmark.NewCommonmarkPlugin(
-				commonmark.WithStrongDelimiter("__"),
-				// ...additional configurations for the plugin
-			),
+func convert(input string) (string, error) {
+	conv := converter.NewConverter(converter.WithPlugins(
+		base.NewBasePlugin(),
+		commonmark.NewCommonmarkPlugin(
+			commonmark.WithStrongDelimiter("__"),
+			commonmark.WithBulletListMarker("*"),
 		),
-	)
+	))
+	return conv.ConvertString(input)
+}
 
-	markdown, err := conv.ConvertString(input)
+func main() {
+	markdown, err := convert(exampleHTML)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println(markdown)
-	// Output: __Bold Text__
 }

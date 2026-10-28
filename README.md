@@ -1,433 +1,150 @@
 # html-to-markdown
 
-A robust html-to-markdown converter that transforms HTML (even entire websites) into clean, readable Markdown. It supports complex formatting, customizable options, and plugins for full control over the conversion process.
+A Go library for converting HTML to Markdown, with CommonMark rendering,
+configurable plugins, and custom element renderers.
 
-Use the fully extendable [Golang library](#golang-library) or a quick [CLI command](#cli---using-it-on-the-command-line). Alternatively, try the [Online Demo](https://html-to-markdown.com) or [REST API](https://html-to-markdown.com/api) to see it in action!
+This is an independently maintained fork of
+[JohannesKaufmann/html-to-markdown](https://github.com/JohannesKaufmann/html-to-markdown).
+The module path is `github.com/soulteary/html-to-markdown/v2`.
+Go 1.25 or newer is required. The only direct external dependency is
+`golang.org/x/net`, used for HTML parsing.
 
-Here are some _cool features_:
+## Install
 
-- **Bold & Italic:** Supports bold and italic—even within single words.
+Install the current maintained branch:
 
-  ![](./.github/images/point_bold_italic.png)
-
-- **List:** Handles ordered and unordered lists with full nesting support.
-
-  ![](./.github/images/point_list.png)
-
-- **Blockquote:** Blockquotes can include other elements, with seamless support for nested quotes.
-
-  ![](./.github/images/point_blockquote.png)
-
-- **Inline Code & Code Block:** Correctly handles backticks and multi-line code blocks, preserving code structure.
-
-  ![](./.github/images/point_code.png)
-
-- **Link & Image:** Properly formats multi-line links, adding escapes for blank lines where needed.
-
-  ![](./.github/images/point_link_image.png)
-
-- **Smart Escaping:** Escapes special characters only when necessary, to avoid accidental Markdown rendering.
-  🗒️ [ESCAPING.md](/ESCAPING.md)
-
-  ![](./.github/images/point_escaping.png)
-
-- **Remove/Keep HTML:** Choose to strip or retain specific HTML tags for ultimate control over output.
-
-  ![](./.github/images/point_wrapper.png)
-
-- **Plugins:** Easily extend with plugins. Or create custom ones to enhance functionality.
-
-  ![](./.github/images/point_strikethrough.png)
-
-- **Table Plugin:** Converts tables with support for alignment, rowspan and colspan.
-
-  ![](./.github/images/point_table.png)
-
----
-
-## Usage
-
-[💻 Golang library](#golang-library) | [📦 CLI](#cli---using-it-on-the-command-line) | [▶️ Hosted Demo](https://html-to-markdown.com) | [🌐 Hosted REST API](https://html-to-markdown.com/api)
-
----
-
-## Golang Library
-
-### Installation
-
-```bash
-go get -u github.com/JohannesKaufmann/html-to-markdown/v2
+```sh
+go get github.com/soulteary/html-to-markdown/v2@main
 ```
 
-_Or if you want a specific commit add the suffix `/v2@commithash`_
+When migrating from upstream, change the `github.com/JohannesKaufmann/html-to-markdown/v2`
+import prefix to `github.com/soulteary/html-to-markdown/v2`, then run `go mod tidy`.
 
-> [!NOTE]  
-> This is the documentation for the v2 library. For the old version switch to the ["v1" branch](https://github.com/JohannesKaufmann/html-to-markdown/tree/v1).
-
-### Usage
-
-[![Go V2 Reference](https://pkg.go.dev/badge/github.com/JohannesKaufmann/html-to-markdown/v2.svg)](https://pkg.go.dev/github.com/JohannesKaufmann/html-to-markdown/v2)
+## Quick start
 
 ```go
 package main
 
 import (
-	"fmt"
-	"log"
+    "fmt"
+    "log"
 
-	htmltomarkdown "github.com/JohannesKaufmann/html-to-markdown/v2"
+    htmltomarkdown "github.com/soulteary/html-to-markdown/v2"
 )
 
 func main() {
-	input := `<strong>Bold Text</strong>`
-
-	markdown, err := htmltomarkdown.ConvertString(input)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(markdown)
-	// Output: **Bold Text**
+    markdown, err := htmltomarkdown.ConvertString(
+        `<h1>Hello</h1><p>A <strong>small</strong> example.</p>`,
+    )
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Println(markdown)
 }
 ```
 
-- 🧑‍💻 [Example code, basics](/examples/basics/main.go)
+Output:
 
-Use `WithDomain` to convert _relative_ links to _absolute_ links:
+```markdown
+# Hello
+
+A **small** example.
+```
+
+## Conversion APIs
+
+- `ConvertString` accepts an HTML string and returns a Markdown string.
+- `ConvertReader` accepts an `io.Reader` and returns Markdown bytes.
+- `ConvertNode` accepts a parsed `*html.Node` and returns Markdown bytes.
+
+These functions enable the base and CommonMark plugins. Use
+`converter.WithDomain("https://example.com/docs/")` to resolve relative links and
+image URLs against a document URL. The [reader example](examples/reader) shows this.
+
+`ConvertNode` normalizes and mutates its input tree. Use separate trees for
+concurrent conversions. A configured `converter.Converter` can be shared for
+conversions; finish registering handlers before using it concurrently, and ensure
+custom handlers are safe for that use.
+
+## Configure rendering and plugins
+
+Create a converter to configure Markdown formatting or enable optional plugins:
 
 ```go
-package main
-
-import (
-	"fmt"
-	"log"
-
-	htmltomarkdown "github.com/JohannesKaufmann/html-to-markdown/v2"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
+conv := converter.NewConverter(
+    converter.WithPlugins(
+        base.NewBasePlugin(),
+        commonmark.NewCommonmarkPlugin(
+            commonmark.WithStrongDelimiter("__"),
+        ),
+        strikethrough.NewStrikethroughPlugin(),
+        table.NewTablePlugin(
+            table.WithCellPaddingBehavior(table.CellPaddingBehaviorNone),
+        ),
+    ),
 )
-
-func main() {
-	input := `<img src="/assets/image.png" />`
-
-	markdown, err := htmltomarkdown.ConvertString(
-		input,
-		converter.WithDomain("https://example.com"),
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(markdown)
-	// Output: ![](https://example.com/assets/image.png)
-}
+markdown, err := conv.ConvertString(htmlInput)
 ```
 
-The function `htmltomarkdown.ConvertString()` is a _small wrapper_ around `converter.NewConverter()` and the _base_ and _commonmark_ plugins. If you want more control, use the following:
+Import `converter` and the plugins from this module's `/converter`,
+`/plugin/base`, `/plugin/commonmark`, `/plugin/strikethrough`, and `/plugin/table`
+packages. See the complete [options](examples/options) and [plugins](examples/plugins)
+programs for runnable code.
 
-```go
-package main
+The table plugin supports alignment, row/column spans, header promotion, empty-row
+filtering, and compact cell padding. For simple line breaks in cells, configure
+`table.WithNewlineBehavior(table.NewlineBehaviorPreserve)` to emit `<br />`.
+Preformatted blocks fall back to block output when they cannot form a valid
+Markdown table.
 
-import (
-	"fmt"
-	"log"
+Images use `src`, falling back to `data-src`, `data-original`, and `data-lazy-src`
+when earlier attributes are empty. Recognized syntax-highlighter gutter/code
+layouts become one code block without line numbers.
 
-	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/base"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/commonmark"
-)
+For custom tags or rendering overrides, use `conv.Register.RendererFor`.
+[Writing plugins](WRITING_PLUGINS.md) explains priorities, fallback behavior, and
+how to package handlers. [Escaping](ESCAPING.md) explains smart escaping and its
+configuration.
 
-func main() {
-	input := `<strong>Bold Text</strong>`
+## Runnable examples
 
-	conv := converter.NewConverter(
-		converter.WithPlugins(
-			base.NewBasePlugin(),
-			commonmark.NewCommonmarkPlugin(
-				commonmark.WithStrongDelimiter("__"),
-				// ...additional configurations for the plugin
-			),
+Each example is a small program with tested output:
 
-			// ...additional plugins (e.g. table)
-		),
-	)
+- [Basics](examples/basics): HTML strings, headings, emphasis, and links.
+- [Reader](examples/reader): `io.Reader` input and relative URL resolution.
+- [Options](examples/options): emphasis delimiters and list markers.
+- [Plugins](examples/plugins): tables and strikethrough together.
+- [Custom renderer](examples/register): a custom tag with validated attributes and fallback text.
 
-	markdown, err := conv.ConvertString(input)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(markdown)
-	// Output: __Bold Text__
-}
+```sh
+go run ./examples/basics
+go run ./examples/reader
+go run ./examples/options
+go run ./examples/plugins
+go run ./examples/register
 ```
 
-- 🧑‍💻 [Example code, options](/examples/options/main.go)
+See the [examples guide](examples/README.md) for expected outputs, and the
+package's tested `Example` functions for the string, reader, and parsed-node APIs.
 
-> [!NOTE]  
-> If you use `NewConverter` directly make sure to also **register the commonmark and base plugin**.
+## Development
 
----
-
-### Collapse & Tag Type
-
-![](./.github/images/tag_type_renderer.png)
-
-You can specify how different HTML tags should be handled during conversion.
-
-- **Tag Types:** When _collapsing_ whitespace it is useful to know if a node is _block_ or _inline_.
-  - So if you have Web Components/Custom Elements remember to register the type using `TagType` or `RendererFor`.
-  - Additionally, you can _remove_ tags completely from the output.
-- **Pre-built Renderers:** There are several pre-built renderers available. For example:
-  - `RenderAsHTML` will render the node (including children) as HTML.
-  - `RenderAsHTMLWrapper` will render the node as HTML and render the children as markdown.
-
-> [!NOTE]  
-> By default, some tags are automatically removed (e.g. `<style>`). You can override existing configuration by using a different _priority_. For example, you could keep `<style>` tags by registering them with `PriorityEarly`.
-
-Here are the examples for the screenshot above:
-
-```go
-conv.Register.TagType("nav", converter.TagTypeRemove, converter.PriorityStandard)
-
-conv.Register.RendererFor("b", converter.TagTypeInline, base.RenderAsHTML, converter.PriorityEarly)
-
-conv.Register.RendererFor("article", converter.TagTypeBlock, base.RenderAsHTMLWrapper, converter.PriorityStandard)
+```sh
+go build ./...
+go vet ./...
+go test -race ./...
 ```
 
-### Plugins
-
-#### Published Plugins
-
-These are the plugins located in the [plugin folder](/plugin):
-
-| Name                  | Description                                                                                        |
-| --------------------- | -------------------------------------------------------------------------------------------------- |
-| Base                  | Implements basic shared functionality (e.g. removing nodes)                                        |
-| Commonmark            | Implements Markdown according to the [Commonmark Spec](https://spec.commonmark.org/)               |
-|                       |                                                                                                    |
-| GitHubFlavored        | _planned_                                                                                          |
-| TaskListItems         | _planned_                                                                                          |
-| Strikethrough         | Converts `<strike>`, `<s>`, and `<del>` to the `~~` syntax.                                        |
-| Table                 | Implements Tables according to the [GitHub Flavored Markdown Spec](https://github.github.com/gfm/) |
-|                       |                                                                                                    |
-| VimeoEmbed            | _planned_                                                                                          |
-| YoutubeEmbed          | _planned_                                                                                          |
-|                       |                                                                                                    |
-| ConfluenceCodeBlock   | _planned_                                                                                          |
-| ConfluenceAttachments | _planned_                                                                                          |
-
-> [!NOTE]  
-> Not all the plugins from v1 are already ported to v2. These will soon be implemented...
-
-These are the plugins in other repositories:
-
-| Name                         | Description         |
-| ---------------------------- | ------------------- |
-| \[Plugin Name\]\(Your Link\) | A short description |
-
-#### Writing Plugins
-
-You want to write custom logic?
-
-1. Write your logic and **register** it.
-
-   ![](./.github/images/autocomplete_register.png)
-   - 🧑‍💻 [Example code, register](/examples/register/main.go)
-
-2. _Optional:_ Package your logic into a **plugin** and publish it.
-   - 🗒️ [WRITING_PLUGINS.md](/WRITING_PLUGINS.md)
-
----
-
----
-
-## CLI - Using it on the command line
-
-Using the Golang library provides the most customization, while the CLI is the simplest way to get started.
-
-### Installation
-
-#### Homebrew Tap
-
-```bash
-brew install JohannesKaufmann/tap/html2markdown
-```
-
-#### Debian
-
-A `deb` package is available. See the [Setup Instructions](https://cloudsmith.io/~html-to-markdown/repos/stable/setup/#formats-deb).
-
-_Note: Support for other Linux distributions is tracked in [#119](https://github.com/JohannesKaufmann/html-to-markdown/issues/119)_
-
-#### Pre-compiled Binaries
-
-Download pre-compiled binaries for Linux, macOS or Windows from the [releases page](https://github.com/JohannesKaufmann/html-to-markdown/releases). Extract the archive and copy the executable to a location in your system PATH (e.g. `/usr/local/bin`).
-
-#### Installation via Go
-
-If you have Go installed, you can install the CLI directly using:
-
-```bash
-go install github.com/JohannesKaufmann/html-to-markdown/v2/cli/html2markdown@latest
-```
-
-This will download the source code and compile it into an executable in your Go binary directory (typically `$GOPATH/bin`).
-
-#### Build from Source
-
-Binaries are automatically built via [GoReleaser](https://goreleaser.com/) and attached to each [release](https://github.com/JohannesKaufmann/html-to-markdown/releases).
-
-To build locally (requires Go):
-
-```bash
-go build ./cli/html2markdown
-```
-
-### Version
-
-```bash
-html2markdown --version
-```
-
-> [!NOTE]  
-> Make sure that `--version` prints `2.X.X` as there is a different CLI for V2 of the converter.
-
-### Usage
-
-```bash
-$ echo "<strong>important</strong>" | html2markdown
-
-**important**
-```
-
-```text
-$ curl --no-progress-meter http://example.com | html2markdown
-
-# Example Domain
-
-This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.
-
-[More information...](https://www.iana.org/domains/example)
-```
-
-```bash
-$ html2markdown --input file.html --output file.md
-
-$ html2markdown --input "src/*.html" --output "dist/"
-```
-
-Recursive batches use a complete `**` path segment, for example:
-
-```bash
-html2markdown --input "src/**/*.html" --output "dist/"
-html2markdown --input "src/**/*.{html,htm}" --output "dist/"
-```
-
-Quote patterns so the CLI expands them consistently. `*`, `?`, character classes,
-and nested `{a,b}` alternatives are supported. Hidden entries are included.
-Directory symlinks discovered during wildcard traversal are not followed; an
-explicitly named directory prefix may contain symlinks. Overlapping matches are
-converted once.
-
-Output directories retain the existing flat layout. The first file with a given
-basename uses `name.md`; later duplicates use `name.<hash>.md`, with the hash
-computed from the path relative to the literal input-pattern base.
-
-Use `--help` to learn about the configurations, for example:
-
-- `--domain="https://example.com"` to convert _relative_ links to _absolute_ links.
-- `--exclude-selector=".ad"` to exclude the html elements with `class="ad"` from the conversion.
-- `--include-selector="article"` to only include the `<article>` html elements in the conversion.
-- `--plugin-strikethrough` or `--plugin-table` to enable plugins.
-
-_(The cli does not support every option yet. Over time more customization will be added)_
-
----
-
----
-
-## FAQ
-
-### Character Encoding
-
-Regardless of which method you use (`ConvertString()`, `ConvertNode()`, etc.), the input is expected to _already_ be UTF-8 encoded. Under the hood, Go's `html.Parse()` is used to build the DOM and it requires UTF-8. It does not detect or convert other charsets.
-
-If your HTML uses a different charset (e.g. `ISO-8859-1`, `Windows-1252`), the replacement character `�` may appear in the output instead of the correct letters.
-
-This library does not handle charset detection or conversion. It is your responsibility to decode the HTML to UTF-8 before passing it in. When fetching HTML over HTTP, the `Content-Type` header tells you the charset. When reading from a file, you may need to detect it from `<meta>` tags or by inspecting the bytes. The [`golang.org/x/net/html/charset`](https://pkg.go.dev/golang.org/x/net/html/charset) package can help with these cases.
-
-### Extending with Plugins
-
-- Need your own logic? Write your own code and then **register** it.
-  - Don't like the **defaults** that the library uses? You can use `PriorityEarly` to run you logic _earlier_ than others.
-
-  - 🧑‍💻 [Example code, register](/examples/register/main.go)
-
-- If you believe that you logic could also benefit others, you can package it up into a **plugin**.
-  - 🗒️ [WRITING_PLUGINS.md](/WRITING_PLUGINS.md)
-
-### Bugs
-
-You found a bug?
-
-[Open an issue](https://github.com/JohannesKaufmann/html-to-markdown/issues/new/choose) with the HTML snippet that does not produce the expected results. Please, please, plase _submit the HTML snippet_ that caused the problem. Otherwise it is very difficult to reproduce and fix...
-
-### Security
-
-This library produces markdown that is readable and can be changed by humans.
-
-When rendering the generated Markdown as HTML, you need to be careful of malicious content.
-
-This library does NOT sanitize untrusted content. Use an HTML sanitizer such as [bluemonday](https://github.com/microcosm-cc/bluemonday) before displaying the HTML in the browser.
-
-🗒️ [SECURITY.md](/SECURITY.md) if you find a security vulnerability
-
-### Lazy-loaded images and code tables
-
-Images use `src` when it is nonempty. Otherwise, the converter tries `data-src`,
-`data-original`, and `data-lazy-src`, in that order. Relative URLs, alt text,
-and titles are handled in the same way as ordinary images.
-
-Two-column syntax-highlighter tables with `gutter` and `code` cells are converted
-to a single code block when the gutter contains consecutive line numbers matching
-the number of code lines. Other tables keep their normal behavior. Tables containing
-`pre` blocks fall back to block content rather than placing fenced code inside
-Markdown table cells, even when the table newline option is `preserve`.
-
-### Goroutines
-
-You can use the `Converter` from (multiple) goroutines. Internally a mutex is used & there is a test to verify that behaviour.
-
-### Escaping & Backslash
-
-Some characters have a special meaning in markdown (e.g. "\*" for emphasis). The backslash `\` character is used to "escape" those characters. That is perfectly safe and won't be displayed in the final render.
-
-🗒️ [ESCAPING.md](/ESCAPING.md)
-
-### Contributing
-
-You want to contribute? Thats great to hear! There are many ways to help:
-
-Helping to answer questions, triaging issues, writing documentation, writing code, ...
-
-If you want to make a code change: Please first discuss the change you wish to make, by opening an issue. I'm also happy to guide you to where a change is most likely needed. There are also extensive tests (see below) so you can freely experiment 🧑‍🔬
-
-_Note: The outside API should not change because of backwards compatibility..._
-
-### Testing
-
-You don't have to be afraid of breaking the converter, since there are many "Golden File" tests:
-
-Add your problematic HTML snippet to one of the `.in.html` files in the `testdata` folders. Then run `go test ./plugin/commonmark ./plugin/strikethrough ./plugin/table -update` and inspect which `.out.md` files changed in Git.
-
-You can now change the internal logic and inspect what impact your change has by running the same command again.
-
-Golden tests compare exact bytes using the standard library. Normal test runs never
-create or overwrite fixtures; missing files and mismatches fail with the fixture path.
-Use `go test ./cli/html2markdown/cmd -update` to update CLI `.golden` fixtures.
-Always review fixture changes before committing them.
-
-_Note: Before submitting your change as a PR, make sure that you run those tests and check the files into GIT..._
-
-### License
-
-Unless otherwise specified, the project is licensed under the terms of the MIT license.
-
-🗒️ [LICENSE](/LICENSE)
+Golden fixtures and regression cases cover the converter and plugins. Fixtures
+are compared byte-for-byte; updates are explicit and should be reviewed.
+[Contributing](CONTRIBUTING.md) documents tests, fixture updates, and repository
+layout. CI builds and tests the library and examples on Linux, macOS, and Windows
+with the minimum supported Go version and the current stable version.
+
+## Security and license
+
+Conversion does not sanitize untrusted content. Sanitize it before rendering
+Markdown as HTML in a browser. See [SECURITY.md](SECURITY.md) for reporting.
+
+[MIT licensed](LICENSE). Original copyright notices and the
+[adapted DOM helper license](internal/domutils/LICENSE.dom) are retained.

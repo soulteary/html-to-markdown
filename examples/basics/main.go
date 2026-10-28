@@ -4,16 +4,19 @@ import (
 	"fmt"
 	"log"
 
-	htmltomarkdown "github.com/JohannesKaufmann/html-to-markdown/v2"
+	htmltomarkdown "github.com/soulteary/html-to-markdown/v2"
 )
 
-func main() {
-	input := `<strong>Bold Text</strong>`
+const exampleHTML = `<h1>Library first</h1><p>A <strong>small</strong> example with <a href="https://example.com">a link</a>.</p>`
 
-	markdown, err := htmltomarkdown.ConvertString(input)
+func convert(input string) (string, error) {
+	return htmltomarkdown.ConvertString(input)
+}
+
+func main() {
+	markdown, err := convert(exampleHTML)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println(markdown)
-	// Output: **Bold Text**
 }

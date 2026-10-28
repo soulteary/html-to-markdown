@@ -1,63 +1,34 @@
-## Escaping
+# Escaping
 
-Some characters have a special meaning in markdown. For example, the character "\*" can be used for lists, emphasis and dividers. By placing a backlash before that character (e.g. "\\\*") you can "escape" it. Then the character will render as a raw "\*" without the _"markdown meaning"_ applied.
+Markdown characters can change the meaning of literal text. For example,
+`<p>**literal**</p>` contains plain asterisks, while
+`<p><strong>literal</strong></p>` contains emphasis. Smart escaping preserves
+that distinction by inserting backslashes where Markdown would otherwise
+interpret literal characters as syntax.
 
-But why is "escaping" even necessary?
-
-<!-- prettier-ignore -->
-```md
-Paragraph 1
--
-Paragraph 2
-```
-
-The markdown above doesn't seem that problematic. But "Paragraph 1" (with only one hyphen below) will be recognized as a _setext heading_.
-
-```html
-<h2>Paragraph 1</h2>
-<p>Paragraph 2</p>
-```
-
-A well-placed backslash character would prevent that...
-
-<!-- prettier-ignore -->
-```md
-Paragraph 1
-\-
-Paragraph 2
-```
-
----
-
-How to configure escaping? Depending on the `EscapeMode` option, the markdown output is going to be different.
+Smart escaping is enabled by default. To explicitly select it on a configured
+converter:
 
 ```go
 conv := converter.NewConverter(
-    converter.WithEscapeMode("smart"), // default
+    converter.WithEscapeMode(converter.EscapeModeSmart),
     converter.WithPlugins(
-        // ...
-    )
+        base.NewBasePlugin(),
+        commonmark.NewCommonmarkPlugin(),
+    ),
 )
 ```
 
-Lets try it out with this HTML input:
+`converter.EscapeModeDisabled` passes Markdown-like text through without that
+protection. Use it only when that interpretation is intended; literal `**text**`
+can then render as emphasis. This setting does not sanitize untrusted content.
 
-|          |                                                       |
-| -------- | ----------------------------------------------------- |
-| input    | `<p>fake **bold** and real <strong>bold</strong></p>` |
-|          |                                                       |
-|          | **With EscapeMode "smart"**                           |
-| output   | `fake \*\*bold\*\* and real **bold**`                 |
-| rendered | fake \*\*bold\*\* and real **bold**                   |
-|          |                                                       |
-|          | **With EscapeMode "disabled"**                        |
-| output   | `fake **bold** and real **bold**`                     |
-| rendered | fake **bold** and real **bold**                       |
+For custom renderers, distinguish Markdown syntax you intentionally generate
+from literal text. Use the conversion context's escaping methods for literal
+text, and add regression tests around punctuation, whitespace, and nested
+formatting. Do not emit the library's internal marker characters as a substitute
+for these methods.
 
-With **smart** escaping, we get some escape characters (the backlash "\\") but it renders correctly.
-
-With escaping **disabled**, the fake and real bold can't be distinguished in the markdown. That means it is both going to render as bold.
-
----
-
-So now you know the purpose of escaping. However, if you encounter some content where the escaping breaks, you can manually disable it. But please also open an issue!
+If escaping produces incorrect output, open a bug report in this repository with
+a minimal HTML input, converter configuration, actual Markdown, and expected
+Markdown.

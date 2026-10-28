@@ -1,0 +1,17 @@
+name: Feature request
+description: Propose a library API, rendering improvement, or plugin.
+title: "[Feature]: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and use case
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Include HTML input and expected Markdown when relevant.
+    validations:
+      required: true

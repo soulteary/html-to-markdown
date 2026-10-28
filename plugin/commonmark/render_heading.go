@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"regexp"
 
-	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/textutils"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/marker"
+	"github.com/soulteary/html-to-markdown/v2/converter"
+	"github.com/soulteary/html-to-markdown/v2/internal/domutils"
+	"github.com/soulteary/html-to-markdown/v2/internal/textutils"
+	"github.com/soulteary/html-to-markdown/v2/marker"
 	"golang.org/x/net/html"
 )
 

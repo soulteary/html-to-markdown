@@ -1,0 +1,40 @@
+name: Bug report
+description: Report a problem with the Go library or a plugin.
+title: "[Bug]: "
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Module version and Go version
+      placeholder: "Module version or commit; output of go version"
+    validations:
+      required: true
+  - type: textarea
+    id: code
+    attributes:
+      label: Minimal Go reproduction
+      description: Include converter options and enabled plugins.
+      render: go
+    validations:
+      required: true
+  - type: textarea
+    id: input
+    attributes:
+      label: HTML input
+      render: html
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Markdown
+      render: markdown
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Markdown
+      render: markdown
+    validations:
+      required: true

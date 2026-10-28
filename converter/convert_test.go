@@ -3,10 +3,10 @@ package converter_test
 import (
 	"testing"
 
-	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/base"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/commonmark"
+	"github.com/soulteary/html-to-markdown/v2/converter"
+	"github.com/soulteary/html-to-markdown/v2/internal/domutils"
+	"github.com/soulteary/html-to-markdown/v2/plugin/base"
+	"github.com/soulteary/html-to-markdown/v2/plugin/commonmark"
 	"golang.org/x/net/html"
 )
 

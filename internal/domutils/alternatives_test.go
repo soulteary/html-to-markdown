@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/tester"
+	"github.com/soulteary/html-to-markdown/v2/internal/domutils"
+	"github.com/soulteary/html-to-markdown/v2/internal/tester"
 )
 
 func TestLeafBlockAlternatives(t *testing.T) {

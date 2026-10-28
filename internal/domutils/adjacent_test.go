@@ -3,8 +3,8 @@ package domutils_test
 import (
 	"testing"
 
-	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/tester"
+	"github.com/soulteary/html-to-markdown/v2/internal/domutils"
+	"github.com/soulteary/html-to-markdown/v2/internal/tester"
 	"golang.org/x/net/html"
 )
 

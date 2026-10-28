@@ -6,62 +6,44 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/base"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/commonmark"
+	"github.com/soulteary/html-to-markdown/v2/converter"
+	"github.com/soulteary/html-to-markdown/v2/plugin/base"
+	"github.com/soulteary/html-to-markdown/v2/plugin/commonmark"
 	"golang.org/x/net/html"
 )
 
-func main() {
-	input := `
-<h2>
-	<span>Golang</span>
-	<star-rating count="5">five stars</star-rating>
-</h2>
-<p>Build simple, secure, <i>scalable</i> systems with Go</p>
-	`
+const exampleHTML = `<h2>Go <star-rating count="4">four stars</star-rating></h2>`
 
-	conv := converter.NewConverter(
-		converter.WithPlugins(
-			base.NewBasePlugin(),
-			commonmark.NewCommonmarkPlugin(),
-		),
-	)
-
-	// Here we a registering a custom *renderer* for <star-rating> and pass in our function.
-	conv.Register.RendererFor("star-rating", converter.TagTypeInline, renderStarRating, converter.PriorityStandard)
-
-	markdown, err := conv.ConvertString(input)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(markdown)
-	// ## Golang ⭐️⭐️⭐️⭐️⭐️
-	//
-	// Build simple, secure, *scalable* systems with Go
+func convert(input string) (string, error) {
+	conv := converter.NewConverter(converter.WithPlugins(
+		base.NewBasePlugin(), commonmark.NewCommonmarkPlugin(),
+	))
+	conv.Register.RendererFor("star-rating", converter.TagTypeInline, renderStarRating, converter.PriorityEarly)
+	return conv.ConvertString(input)
 }
 
-func renderStarRating(ctx converter.Context, w converter.Writer, node *html.Node) converter.RenderStatus {
-	// Read attributes directly so this example can be copied into external plugins.
-	rawCount := "0"
+func renderStarRating(_ converter.Context, w converter.Writer, node *html.Node) converter.RenderStatus {
+	// Read attributes directly so the example can be copied into an external plugin.
+	var rawCount string
 	for _, attr := range node.Attr {
 		if attr.Key == "count" {
 			rawCount = attr.Val
 			break
 		}
 	}
-	count, _ := strconv.Atoi(rawCount)
-
-	rating := strings.Repeat("⭐️", count)
-
-	// Write the content
-	w.WriteString(rating)
-
-	// w.WriteString(" (")
-	// ctx.RenderChildNodes(ctx, w, node)
-	// w.WriteString(")")
-
-	// And then return whether it was a *success*
-	// or if the next renderer should be tried.
+	count, err := strconv.Atoi(rawCount)
+	if err != nil || count < 0 || count > 5 {
+		// Let normal rendering preserve the element's fallback text.
+		return converter.RenderTryNext
+	}
+	w.WriteString(strings.Repeat("★", count))
 	return converter.RenderSuccess
+}
+
+func main() {
+	markdown, err := convert(exampleHTML)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(markdown)
 }
