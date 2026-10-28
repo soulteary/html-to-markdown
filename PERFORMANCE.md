@@ -38,6 +38,91 @@ go tool pprof -alloc_space memory.pprof
 Keep profiles outside version control. Run `go test -race ./...` separately to
 validate correctness and concurrent use.
 
+## v2.0.1 compared with upstream v2.5.2
+
+Measured on 2026-10-28 with Apple M5 / darwin-arm64. Both versions use **Go
+1.27.3** and `golang.org/x/net v0.55.0`. The comparison module pins the public
+releases without local replacements:
+
+- Upstream: [`v2.5.2`, `290df46`](https://github.com/JohannesKaufmann/html-to-markdown/tree/290df46a279e3d7d9011dbbb199658dfcb5ec272), which was upstream main when checked.
+- This fork: [`v2.0.1`, `1ddc200`](https://github.com/soulteary/html-to-markdown/tree/1ddc200789715a7322354988ea3b52f64e5d2948).
+
+The primary run fixes **`GOMAXPROCS=1`**. For each workload and mode, eight paired
+rounds alternate the version measured first (four rounds each). Each sample
+uses `-benchtime=500ms`; the tables contain medians of the eight Go benchmark
+samples. They measure conversion including parsing, normalization, rendering,
+escaping, result allocation, and GC costs during the timed loop. Reuse setup,
+module downloads, and compilation are outside that loop.
+
+Every operation parses a fresh DOM from the same HTML string. The base and
+CommonMark plugins are enabled for both versions; the table workload also
+enables the table plugin. All nine workload outputs have identical SHA-256
+hashes. Input sizes range from 54 bytes to 86,007 bytes; generators and hashes
+are included with the [reproduction module](docs/benchmarks/v2.0.1-upstream/README.md).
+
+Arrows below mean **upstream → v2.0.1**. Percentage change is
+`(fork median / upstream median - 1) × 100`; negative values mean less time or
+allocation. KiB is 1,024 bytes. Allocated bytes and allocation counts are
+per-operation totals, not peak/live memory or RSS. Fractional counts can arise
+when taking the median of an even number of benchmark samples.
+
+### Reusing a configured converter
+
+| Workload | Time (µs/op) | Allocated (KiB/op) | Allocations/op |
+| --- | ---: | ---: | ---: |
+| Small fragment | 5.651 → 4.303 (-23.8%) | 9.41 → 7.75 (-17.7%) | 148 → 86 (-41.9%) |
+| Article | 965.256 → 681.638 (-29.4%) | 931.30 → 662.49 (-28.9%) | 16,188 → 7,287 (-55.0%) |
+| Dense Markdown punctuation | 2,079.247 → 640.599 (-69.2%) | 2,836.13 → 662.10 (-76.7%) | 32,111 → 61 (-99.8%) |
+| Links and images | 726.524 → 631.816 (-13.0%) | 674.12 → 557.75 (-17.3%) | 12,767 → 9,682 (-24.2%) |
+| Many sibling nodes | 1,884.035 → 1,252.495 (-33.5%) | 1,422.09 → 887.43 (-37.6%) | 33,176 → 12,090 (-63.6%) |
+| Wide tree removals | 2,387.244 → 2,180.880 (-8.6%) † | 1,291.21 → 1,002.01 (-22.4%) | 29,458 → 14,086 (-52.2%) |
+| Long Unicode text | 2,275.506 → 1,223.173 (-46.2%) | 2,393.26 → 1,590.10 (-33.6%) | 8,115 → 62 (-99.2%) |
+| 128-level deep tree | 160.536 → 158.262 (-1.4%) † | 41.01 → 30.21 (-26.3%) | 742 → 202 (-72.8%) |
+| Table | 858.152 → 649.997 (-24.3%) | 586.64 → 420.65 (-28.3%) | 12,640 → 6,138 (-51.4%) |
+
+### Creating a converter for every conversion
+
+| Workload | Time (µs/op) | Allocated (KiB/op) | Allocations/op |
+| --- | ---: | ---: | ---: |
+| Small fragment | 8.000 → 7.525 (-5.9%) | 14.15 → 13.57 (-4.1%) | 199 → 165 (-17.1%) |
+| Article | 973.514 → 672.066 (-31.0%) | 935.78 → 668.31 (-28.6%) | 16,233 → 7,366 (-54.6%) |
+| Dense Markdown punctuation | 1,809.177 → 536.258 (-70.4%) | 2,840.87 → 667.92 (-76.5%) | 32,162 → 140 (-99.6%) |
+| Links and images | 933.693 → 765.943 (-18.0%) | 678.81 → 563.31 (-17.0%) | 12,817 → 9,757 (-23.9%) |
+| Many sibling nodes | 1,748.398 → 1,193.635 (-31.7%) | 1,426.13 → 892.99 (-37.4%) | 33,212.5 → 12,165 (-63.4%) |
+| Wide tree removals | 1,913.976 → 1,450.247 (-24.2%) | 1,302.83 → 1,007.57 (-22.7%) | 29,655.5 → 14,161 (-52.2%) |
+| Long Unicode text | 2,602.682 → 1,638.202 (-37.1%) | 2,397.99 → 1,595.92 (-33.4%) | 8,166 → 141 (-98.3%) |
+| 128-level deep tree | 153.498 → 157.354 (+2.5%) † | 45.74 → 35.77 (-21.8%) | 793 → 277 (-65.1%) |
+| Table | 834.722 → 573.570 (-31.3%) | 591.71 → 426.55 (-27.9%) | 12,697.5 → 6,220 (-51.0%) |
+
+† The approximate paired-bootstrap timing interval crosses zero, so these
+nominal changes are within the observed sample variation. Intervals use 5,000
+resamples of the eight paired rounds, with seed 20261028. They describe this
+run's samples rather than every environment or production request latency.
+
+In Reuse mode, dense punctuation takes about **69.2% less time** (approximately
+**3.25×** the throughput) and allocates **76.7% fewer bytes**. Long Unicode text
+uses 46.2% less time, articles 29.4%, and many sibling nodes 33.5%. All nine
+workloads allocate fewer bytes and objects. Deep-tree timing is essentially
+unchanged; its Fresh median is slightly slower, while its Reuse median is
+slightly faster. Wide-tree Reuse timing is also too variable for a stable
+speedup claim. These synthetic results do not establish a uniform speedup for
+all HTML documents.
+
+A separately retained default-setting control uses `GOMAXPROCS=10`. Its timing
+variation is wider: for example, deep-tree Reuse has a +8.0% median change with
+an interval crossing zero. The settings are not combined, and neither run is a
+multi-document parallel-throughput benchmark. See the complete data:
+
+- [Primary CSV, 18 workload/mode combinations](docs/benchmarks/v2.0.1-upstream/results/gomaxprocs-1.csv) and [raw Go output](docs/benchmarks/v2.0.1-upstream/results/gomaxprocs-1.txt).
+- [Default-setting control CSV](docs/benchmarks/v2.0.1-upstream/results/gomaxprocs-10.csv) and [raw Go output](docs/benchmarks/v2.0.1-upstream/results/gomaxprocs-10.txt).
+- [Input/output hashes](docs/benchmarks/v2.0.1-upstream/results/input-output-hashes.json) and [toolchain record](docs/benchmarks/v2.0.1-upstream/results/environment.txt).
+
+To reproduce both the parity check and the primary timing run, follow the
+[standalone benchmark instructions](docs/benchmarks/v2.0.1-upstream/README.md).
+The root library module retains its existing dependency set. The earlier
+measurements below use different baselines and settings and remain historical
+records of individual optimization steps.
+
 ## Batch conversion
 
 For repeated conversions, create a `converter.Converter` with the base and
@@ -65,7 +150,7 @@ Unescaping loads its handler snapshot only on the first eligible marker in each
 call, then reuses it for the remaining markers. Plain table cells therefore
 avoid an unnecessary handler lookup.
 
-## Development measurement
+## Historical handler/escaping measurement
 
 On Apple M5 / darwin-arm64 with Go 1.27.3, five 250 ms samples per workload
 compared main revision `3cdb486` (using the same benchmark file) with the handler

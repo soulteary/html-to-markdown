@@ -1,0 +1,74 @@
+[
+  {
+    "case": "Small",
+    "fork_output_sha256": "2fab3f9d919eb5f327c53b0015ab891ed6e1b1a183133123fdbdbace36b7c808",
+    "input_bytes": 54,
+    "input_sha256": "68810069988d158cb752bffc91cb3e63b093f00ba91bd06d656c21d6dd307a12",
+    "output_bytes": 29,
+    "upstream_output_sha256": "2fab3f9d919eb5f327c53b0015ab891ed6e1b1a183133123fdbdbace36b7c808"
+  },
+  {
+    "case": "Article",
+    "fork_output_sha256": "c53417a6bd33bf95dd3bcafde6331c7e87da5782f1543144fe611868eebd6b59",
+    "input_bytes": 23200,
+    "input_sha256": "b59b2c6a323a475f4aaf8af69597bdb93447303432e11b02b03e80b98ab24271",
+    "output_bytes": 14998,
+    "upstream_output_sha256": "c53417a6bd33bf95dd3bcafde6331c7e87da5782f1543144fe611868eebd6b59"
+  },
+  {
+    "case": "MarkdownText",
+    "fork_output_sha256": "ef37d5f1944b8f67fca0becfc66e50871ecc53154bb0120a26c1e90ffef8604c",
+    "input_bytes": 32007,
+    "input_sha256": "585efc07287653f70a26bf5708ecdcde8dc6331d4bf8fabb934a3bbbb307dc51",
+    "output_bytes": 34499,
+    "upstream_output_sha256": "ef37d5f1944b8f67fca0becfc66e50871ecc53154bb0120a26c1e90ffef8604c"
+  },
+  {
+    "case": "Links",
+    "fork_output_sha256": "2dbc429caeef04f5f868cd8bcc721b73e16ed7d9b9fb3d0fe8e8f228eedff844",
+    "input_bytes": 19200,
+    "input_sha256": "5376c9b4baa65b31e21fbd1064ecf50d641de8f7f7e65fe5886fd9c79a85cf4f",
+    "output_bytes": 12398,
+    "upstream_output_sha256": "2dbc429caeef04f5f868cd8bcc721b73e16ed7d9b9fb3d0fe8e8f228eedff844"
+  },
+  {
+    "case": "ManyNodes",
+    "fork_output_sha256": "897751d6eb8d8a91b6cf6ad0fbd9c45b6dfd5af968d8eb2a6327cd3cf570188b",
+    "input_bytes": 34011,
+    "input_sha256": "d99c3ac783cbd8e4f44860e675171548e1ff15646fcc74144f760808d0bd17ad",
+    "output_bytes": 8000,
+    "upstream_output_sha256": "897751d6eb8d8a91b6cf6ad0fbd9c45b6dfd5af968d8eb2a6327cd3cf570188b"
+  },
+  {
+    "case": "WideRemovals",
+    "fork_output_sha256": "0655871158a9e099fc360927a8996032b8d6936eb726b402002aa820323cb296",
+    "input_bytes": 63011,
+    "input_sha256": "9c360d9d5a9989e61e2ca19c98d81fb308030e0b78dc9aa48f85f9d01a13e453",
+    "output_bytes": 4000,
+    "upstream_output_sha256": "0655871158a9e099fc360927a8996032b8d6936eb726b402002aa820323cb296"
+  },
+  {
+    "case": "LongUnicodeText",
+    "fork_output_sha256": "d915c1209b6e1535da8a2945ed66bea469f6abaaa9727f5060e6ad56693144ee",
+    "input_bytes": 86007,
+    "input_sha256": "85f52466e5accf223fef5fb37dcf111b1396d15315bb8a65b83f93f314ac62d5",
+    "output_bytes": 81999,
+    "upstream_output_sha256": "d915c1209b6e1535da8a2945ed66bea469f6abaaa9727f5060e6ad56693144ee"
+  },
+  {
+    "case": "DeepTree",
+    "fork_output_sha256": "17d9865b2423aca1fce435327a5be49869b88759adc27225e7b5a66c348a0740",
+    "input_bytes": 1424,
+    "input_sha256": "6c2ac09faf4d1e6a8a374ce29763b074c80957286cebc32e4bc6910933a221e2",
+    "output_bytes": 9,
+    "upstream_output_sha256": "17d9865b2423aca1fce435327a5be49869b88759adc27225e7b5a66c348a0740"
+  },
+  {
+    "case": "Table",
+    "fork_output_sha256": "c758c890a2693306e74d2dbf85427e11b9052977089fa8d0877b8991fea2881b",
+    "input_bytes": 10051,
+    "input_sha256": "c770a09628da3f2bb0faf8c15f3df0fb4d4282f49e9c00969e959bb42cade715",
+    "output_bytes": 4241,
+    "upstream_output_sha256": "c758c890a2693306e74d2dbf85427e11b9052977089fa8d0877b8991fea2881b"
+  }
+]
