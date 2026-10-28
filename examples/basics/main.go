@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	htmltomarkdown "github.com/soulteary/html-to-markdown/v2"
 )
@@ -14,9 +13,12 @@ func convert(input string) (string, error) {
 }
 
 func main() {
-	markdown, err := convert(exampleHTML)
+	fmt.Println(must(convert(exampleHTML)))
+}
+
+func must(markdown string, err error) string {
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
-	fmt.Println(markdown)
+	return markdown
 }

@@ -101,3 +101,9 @@ func BenchmarkEscapeMultiLine(b *testing.B) {
 		}
 	})
 }
+
+func TestEscapeMultiLinePreservesExistingHardBreak(t *testing.T) {
+	if got := string(EscapeMultiLine([]byte("first  \nsecond"))); got != "first  \nsecond" {
+		t.Fatalf("hard break changed: %q", got)
+	}
+}

@@ -64,6 +64,7 @@ func protectInputMarkers(doc *html.Node, domain string) (func([]byte) []byte, fu
 		used[r] = true
 	}
 	candidate := rune(0xe000)
+	issuedRunes := make(map[rune]bool)
 	nextToken := func() string {
 		for candidate <= 0x10fffd {
 			if candidate == 0xf900 {
@@ -76,13 +77,20 @@ func protectInputMarkers(doc *html.Node, domain string) (func([]byte) []byte, fu
 			candidate++
 			if !used[r] {
 				used[r] = true
+				issuedRunes[r] = true
 				return string(r)
 			}
 		}
 		// If every private-use rune occurs, a sequence longer than all input
 		// cannot be constructed by concatenating its text nodes either.
 		candidate++
-		return strings.Repeat("\ue000", utf8.RuneCountInString(input)+int(candidate-0x10fffd))
+		// Avoid any previously issued single-rune token as the prefix, and
+		// distinguish equally long fallback tokens with different suffixes.
+		prefix := rune(0xe000)
+		for issuedRunes[prefix] {
+			prefix++
+		}
+		return strings.Repeat(string(prefix), utf8.RuneCountInString(input)+1) + string(0xe000+candidate-0x10fffd)
 	}
 	bellToken, newlineToken := nextToken(), nextToken()
 	protect := strings.NewReplacer(bell, bellToken, newline, newlineToken)

@@ -6,14 +6,13 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"testing"
 )
 
 var updateGoldenFiles = flag.Bool("update", false, "update golden test files")
 
 // AssertGolden compares actual bytes with a fixture, or updates it when the
 // test binary receives -update. Normal test runs never write fixture files.
-func AssertGolden(t *testing.T, path string, actual []byte) {
+func AssertGolden(t reporter, path string, actual []byte) {
 	t.Helper()
 	if err := checkGolden(path, actual, *updateGoldenFiles); err != nil {
 		t.Error(err)

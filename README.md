@@ -154,8 +154,8 @@ repeatable measurement commands.
 
 CI uses [go-test-report-action](https://github.com/soulteary/go-test-report-action)
 to generate a coverage badge, Markdown and JSON reports, and raw race-test
-results for all packages, including examples and test helpers. Coverage is
-reported without a percentage gate; it measures executed statements, not every
+results for all packages, including examples and test helpers. CI requires 100% statement coverage for both the full module and each package,
+without excluding examples or test helpers. Coverage measures executed statements, not every
 possible input or the absence of bugs.
 [Go Report Card](https://github.com/soulteary/goreportcard-action) generates the
 code quality badge and report.

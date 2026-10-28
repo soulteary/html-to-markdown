@@ -1,16 +1,12 @@
 package main
 
 import (
-	"fmt"
+	"errors"
 	"testing"
 )
 
 func Example() {
-	markdown, err := convert(exampleHTML)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(markdown)
+	main()
 	// Output:
 	// ## Go ★★★★
 }
@@ -25,4 +21,14 @@ func TestInvalidRatingsPreserveFallback(t *testing.T) {
 			t.Fatalf("count %q: %q", count, markdown)
 		}
 	}
+}
+
+func TestMustPreservesConversionError(t *testing.T) {
+	expected := errors.New("conversion failed")
+	defer func() {
+		if got := recover(); got != expected {
+			t.Fatalf("panic: %v; want original conversion error", got)
+		}
+	}()
+	must("", expected)
 }
