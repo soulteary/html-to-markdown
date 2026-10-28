@@ -1,16 +1,25 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"testing"
+)
 
 func Example() {
-	markdown, err := convert(exampleHTML)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(markdown)
+	main()
 	// Output:
 	// __Custom formatting__
 	//
 	// * First
 	// * Second
+}
+
+func TestMustPreservesConversionError(t *testing.T) {
+	expected := errors.New("conversion failed")
+	defer func() {
+		if got := recover(); got != expected {
+			t.Fatalf("panic: %v; want original conversion error", got)
+		}
+	}()
+	must("", expected)
 }

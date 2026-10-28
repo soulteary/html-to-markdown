@@ -1,30 +1,26 @@
 package tester
 
 import (
-	"bytes"
+	"io"
 	"strings"
-	"testing"
 
 	"github.com/soulteary/html-to-markdown/v2/internal/domutils"
 	"golang.org/x/net/html"
 )
 
-func Parse(t *testing.T, rawHTML string, startFrom string) *html.Node {
+func Parse(t reporter, rawHTML string, startFrom string) *html.Node {
+	t.Helper()
+	return parseReader(t, strings.NewReader(strings.TrimSpace(rawHTML)), startFrom)
+}
+
+func parseReader(t reporter, input io.Reader, startFrom string) *html.Node {
 	if startFrom == "" {
 		startFrom = "body"
 	}
 
-	rawHTML = strings.TrimSpace(rawHTML)
-
-	doc, err := html.Parse(strings.NewReader(rawHTML))
+	doc, err := html.Parse(input)
 	if err != nil {
 		t.Fatal(err)
-	}
-
-	var b bytes.Buffer
-	err = html.Render(&b, doc)
-	if err != nil {
-		t.Error(err)
 	}
 
 	var foundNode *html.Node

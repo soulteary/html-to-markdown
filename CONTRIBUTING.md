@@ -18,7 +18,8 @@ Use Go 1.27.3 or newer. The module path is
 gofmt -w .
 go build ./...
 go vet ./...
-go test -race ./... -count=1
+go test -race "-coverprofile=coverage.out" -covermode=atomic ./... -count=1
+go tool cover -func=coverage.out
 ```
 
 Keep rendering changes covered by a focused regression test or a golden fixture.
@@ -30,8 +31,9 @@ with `go run ./examples/<name>` before updating its documented output.
 The Go workflow preserves the six Go/OS build, vet, and race-test checks and
 runs coverage reporting and Go Report Card on Ubuntu. Download the
 `go-quality-reports` artifact from a workflow run to inspect the Markdown/JSON
-reports and raw test results. Coverage includes examples and internal helpers;
-there is currently no total or per-package percentage gate.
+reports and raw test results. Coverage includes examples and internal helpers. CI enforces 100% statement
+coverage for the full module and every package, using the default per-package
+instrumentation (no package exclusions or `-coverpkg` override).
 
 The five stable files under `.github/` (`coverage.svg`, `go-test-report.md`,
 `go-test-report.json`, `goreportcard.svg`, and `goreportcard-report.md`) are

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 
@@ -41,9 +40,12 @@ func renderStarRating(_ converter.Context, w converter.Writer, node *html.Node) 
 }
 
 func main() {
-	markdown, err := convert(exampleHTML)
+	fmt.Println(must(convert(exampleHTML)))
+}
+
+func must(markdown string, err error) string {
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
-	fmt.Println(markdown)
+	return markdown
 }

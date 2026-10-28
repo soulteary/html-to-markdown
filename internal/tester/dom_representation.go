@@ -2,13 +2,12 @@ package tester
 
 import (
 	"strings"
-	"testing"
 
 	"github.com/soulteary/html-to-markdown/v2/internal/domutils"
 	"golang.org/x/net/html"
 )
 
-func ExpectRepresentation(t *testing.T, doc *html.Node, name string, expectedHtml string) {
+func ExpectRepresentation(t reporter, doc *html.Node, name string, expectedHtml string) {
 	actualHtml := domutils.RenderRepresentation(doc)
 
 	actualHtml = strings.TrimSpace(actualHtml)
