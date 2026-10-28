@@ -4,12 +4,12 @@
 
 | Metric | Value |
 | --- | --- |
-| Total | 137 |
-| Passed | 137 |
+| Total | 167 |
+| Passed | 167 |
 | Failed | 0 |
 | Skipped | 0 |
-| Coverage | 86.49% |
-| Threshold | 0.00% |
+| Coverage | 100.00% |
+| Threshold | 100.00% |
 
 ### Packages
 
@@ -17,18 +17,18 @@
 | --- | --- | --- | --- | --- |
 | . | pass | 18 | 0 | 100.00% |
 | collapse | pass | 10 | 0 | 100.00% |
-| converter | pass | 15 | 0 | 75.80% |
-| examples/basics | pass | 1 | 0 | 20.00% |
-| examples/options | pass | 1 | 0 | 33.33% |
-| examples/plugins | pass | 1 | 0 | 33.33% |
-| examples/reader | pass | 1 | 0 | 33.33% |
-| examples/register | pass | 2 | 0 | 76.47% |
-| internal/domutils | pass | 35 | 0 | 85.47% |
-| internal/escape | pass | 16 | 0 | 97.85% |
-| internal/tester | pass | 3 | 0 | 16.00% |
-| internal/textutils | pass | 9 | 0 | 97.56% |
-| marker | no\_tests | 0 | 0 | 0.00% |
+| converter | pass | 20 | 0 | 100.00% |
+| examples/basics | pass | 2 | 0 | 100.00% |
+| examples/options | pass | 2 | 0 | 100.00% |
+| examples/plugins | pass | 2 | 0 | 100.00% |
+| examples/reader | pass | 2 | 0 | 100.00% |
+| examples/register | pass | 3 | 0 | 100.00% |
+| internal/domutils | pass | 41 | 0 | 100.00% |
+| internal/escape | pass | 17 | 0 | 100.00% |
+| internal/tester | pass | 7 | 0 | 100.00% |
+| internal/textutils | pass | 10 | 0 | 100.00% |
+| marker | pass | 1 | 0 | 100.00% |
 | plugin/base | pass | 1 | 0 | 100.00% |
-| plugin/commonmark | pass | 8 | 0 | 90.02% |
-| plugin/strikethrough | pass | 3 | 0 | 97.14% |
-| plugin/table | pass | 13 | 0 | 97.68% |
+| plugin/commonmark | pass | 13 | 0 | 100.00% |
+| plugin/strikethrough | pass | 4 | 0 | 100.00% |
+| plugin/table | pass | 14 | 0 | 100.00% |
