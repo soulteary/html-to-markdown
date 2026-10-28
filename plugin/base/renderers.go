@@ -1,8 +1,8 @@
 package base
 
 import (
-	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
-	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
+	"github.com/soulteary/html-to-markdown/v2/converter"
+	"github.com/soulteary/html-to-markdown/v2/internal/domutils"
 	"golang.org/x/net/html"
 )
 

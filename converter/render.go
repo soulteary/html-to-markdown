@@ -1,7 +1,7 @@
 package converter
 
 import (
-	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
+	"github.com/soulteary/html-to-markdown/v2/internal/domutils"
 	"golang.org/x/net/html"
 )
 

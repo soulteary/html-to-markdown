@@ -8,7 +8,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/JohannesKaufmann/html-to-markdown/v2/marker"
+	"github.com/soulteary/html-to-markdown/v2/marker"
 	"golang.org/x/net/html"
 )
 

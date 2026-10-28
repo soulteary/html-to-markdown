@@ -1,6 +1,10 @@
-# Security Policy
+# Security
 
-## Reporting a Vulnerability
+The converter does not sanitize HTML or Markdown. Sanitize untrusted content
+before rendering it as HTML in a browser.
 
-Please report (suspected) security vulnerabilities to johannes@joina.de with the subject _"Security html-to-markdown"_ and you will receive a response within 48 hours.
-
+For a suspected vulnerability in this library, request a private reporting channel
+from [the maintainer](https://github.com/soulteary) before sharing exploit details.
+Use GitHub's private vulnerability reporting option when it is available in this
+repository's Security tab. Avoid publishing sensitive details in public issues
+or pull requests.
