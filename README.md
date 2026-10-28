@@ -313,6 +313,23 @@ $ html2markdown --input file.html --output file.md
 $ html2markdown --input "src/*.html" --output "dist/"
 ```
 
+Recursive batches use a complete `**` path segment, for example:
+
+```bash
+html2markdown --input "src/**/*.html" --output "dist/"
+html2markdown --input "src/**/*.{html,htm}" --output "dist/"
+```
+
+Quote patterns so the CLI expands them consistently. `*`, `?`, character classes,
+and nested `{a,b}` alternatives are supported. Hidden entries are included.
+Directory symlinks discovered during wildcard traversal are not followed; an
+explicitly named directory prefix may contain symlinks. Overlapping matches are
+converted once.
+
+Output directories retain the existing flat layout. The first file with a given
+basename uses `name.md`; later duplicates use `name.<hash>.md`, with the hash
+computed from the path relative to the literal input-pattern base.
+
 Use `--help` to learn about the configurations, for example:
 
 - `--domain="https://example.com"` to convert _relative_ links to _absolute_ links.

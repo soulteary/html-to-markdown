@@ -1,5 +1,3 @@
-github.com/bmatcuk/doublestar/v4 v4.10.0 h1:zU9WiOla1YA122oLM6i4EXvGW62DvKZVxIe6TYWexEs=
-github.com/bmatcuk/doublestar/v4 v4.10.0/go.mod h1:xBQ8jztBU6kakFMg+8WGxn0c6z1fTSPVIjEY1Wr7jzc=
 github.com/soulteary/cascadia v1.0.1-0.20261028012810-75ec99f3f68a h1:iJYDV6EDyk6JaAou4H5Xw37ZRtwgpQmWsBDtTTHApeM=
 github.com/soulteary/cascadia v1.0.1-0.20261028012810-75ec99f3f68a/go.mod h1:7arpchZ3j0E9OlpuqHJ9sfaN4iWAp7aIPX/QTtvPKk4=
 golang.org/x/net v0.55.0 h1:bcvxaJn3e1U6InsFWt1JUq1aSjnRxLzT2rtD2KfkDF8=

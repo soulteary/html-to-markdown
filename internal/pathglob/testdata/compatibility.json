@@ -1,0 +1,1703 @@
+[
+  {
+    "Pattern": "",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "*.html",
+    "Matches": [
+      ".hidden.html",
+      "a.html",
+      "root.html",
+      "z.html",
+      "中.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**",
+    "Matches": [
+      ".hidden/inside.html",
+      ".hidden.html",
+      "[literal]/one.html",
+      "a/b/two.html",
+      "a/one.html",
+      "a-/dash.html",
+      "a.html",
+      "b/data.txt",
+      "b/one.html",
+      "braces{a}/one.html",
+      "empty/.keep",
+      "root.html",
+      "z.html",
+      "中.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/*",
+    "Matches": [
+      ".hidden.html",
+      "a.html",
+      "root.html",
+      "z.html",
+      "中.html",
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a/one.html",
+      "a/b/two.html",
+      "a-/dash.html",
+      "b/data.txt",
+      "b/one.html",
+      "braces{a}/one.html",
+      "empty/.keep"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/*.html",
+    "Matches": [
+      ".hidden.html",
+      "a.html",
+      "root.html",
+      "z.html",
+      "中.html",
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a/one.html",
+      "a/b/two.html",
+      "a-/dash.html",
+      "b/one.html",
+      "braces{a}/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/one.html",
+    "Matches": [
+      "[literal]/one.html",
+      "a/one.html",
+      "b/one.html",
+      "braces{a}/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/**",
+    "Matches": [
+      "a/b/two.html",
+      "a/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/**/*.html",
+    "Matches": [
+      "a/one.html",
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a**/*.html",
+    "Matches": [
+      "a/one.html",
+      "a-/dash.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/**/../*.html",
+    "Matches": [
+      "a/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/**/*.html",
+    "Matches": [
+      "a/one.html",
+      "a/b/two.html",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{b,a}/one.html",
+    "Matches": [
+      "a/one.html",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,{b,a}}/**/*.html",
+    "Matches": [
+      "a/one.html",
+      "a/b/two.html",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{root.html,a/one.html}",
+    "Matches": [
+      "a/one.html",
+      "root.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/../*.html",
+    "Matches": [
+      ".hidden.html",
+      "a.html",
+      "root.html",
+      "z.html",
+      "中.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/{one,two}.*",
+    "Matches": [
+      "[literal]/one.html",
+      "a/b/two.html",
+      "a/one.html",
+      "b/one.html",
+      "braces{a}/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/{one,one}.html",
+    "Matches": [
+      "[literal]/one.html",
+      "a/one.html",
+      "b/one.html",
+      "braces{a}/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "*.{html,txt}",
+    "Matches": [
+      ".hidden.html",
+      "a.html",
+      "root.html",
+      "z.html",
+      "中.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[!z]*.html",
+    "Matches": [
+      ".hidden.html",
+      "a.html",
+      "root.html",
+      "中.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[^z]*.html",
+    "Matches": [
+      ".hidden.html",
+      "a.html",
+      "root.html",
+      "中.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[a-z].html",
+    "Matches": [
+      "a.html",
+      "z.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[-a]*",
+    "Matches": [
+      "a.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[a-]*",
+    "Matches": [
+      "a.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[z-a]*",
+    "Matches": [
+      "z.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[a-b-c]*",
+    "Matches": [
+      "a.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,}/one.html",
+    "Matches": [
+      "a/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{,root.html}",
+    "Matches": [
+      "root.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{}",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a}",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/{b/,}*.html",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[{}]*/*.html",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/[",
+    "Matches": null,
+    "BadPattern": true
+  },
+  {
+    "Pattern": "missing/[",
+    "Matches": null,
+    "BadPattern": true
+  },
+  {
+    "Pattern": "{x,y",
+    "Matches": null,
+    "BadPattern": true
+  },
+  {
+    "Pattern": "x}",
+    "Matches": null,
+    "BadPattern": true
+  },
+  {
+    "Pattern": "[]",
+    "Matches": null,
+    "BadPattern": true
+  },
+  {
+    "Pattern": "[!]",
+    "Matches": null,
+    "BadPattern": true
+  },
+  {
+    "Pattern": "a/**/",
+    "Matches": [
+      "a/b/two.html",
+      "a/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": ".",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "..",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "missing/**/{a,b}/[",
+    "Matches": null,
+    "BadPattern": true
+  },
+  {
+    "Pattern": "{}[",
+    "Matches": null,
+    "BadPattern": true
+  },
+  {
+    "Pattern": "**/{,a}/*.html",
+    "Matches": [
+      "a/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/{a,}/*.html",
+    "Matches": [
+      "a/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/{a,b}/**",
+    "Matches": [
+      "a/b/two.html",
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/**/{one,two}.html",
+    "Matches": [
+      "a/b/two.html",
+      "a/one.html",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/{../,b}/*.html",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/{.,a}/*.html",
+    "Matches": [
+      ".hidden.html",
+      "a.html",
+      "root.html",
+      "z.html",
+      "中.html",
+      "a/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "*",
+    "Matches": [
+      ".hidden.html",
+      "a.html",
+      "root.html",
+      "z.html",
+      "中.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "*.html",
+    "Matches": [
+      ".hidden.html",
+      "a.html",
+      "root.html",
+      "z.html",
+      "中.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "*/*",
+    "Matches": [
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a/one.html",
+      "a-/dash.html",
+      "b/data.txt",
+      "b/one.html",
+      "braces{a}/one.html",
+      "empty/.keep"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "*/**",
+    "Matches": [
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a/b/two.html",
+      "a/one.html",
+      "a-/dash.html",
+      "b/data.txt",
+      "b/one.html",
+      "braces{a}/one.html",
+      "empty/.keep"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "?",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "?.html",
+    "Matches": [
+      "a.html",
+      "z.html",
+      "中.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "?/*",
+    "Matches": [
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "?/**",
+    "Matches": [
+      "a/b/two.html",
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[!a]",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[!a].html",
+    "Matches": [
+      "z.html",
+      "中.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[!a]/*",
+    "Matches": [
+      "b/data.txt",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[!a]/**",
+    "Matches": [
+      "b/data.txt",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[a-z]",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[a-z].html",
+    "Matches": [
+      "a.html",
+      "z.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[a-z]/*",
+    "Matches": [
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[a-z]/**",
+    "Matches": [
+      "a/b/two.html",
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{one,two}",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{one,two}.html",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{one,two}/*",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{one,two}/**",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{*,one}",
+    "Matches": [
+      ".hidden.html",
+      "a.html",
+      "root.html",
+      "z.html",
+      "中.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{*,one}.html",
+    "Matches": [
+      ".hidden.html",
+      "a.html",
+      "root.html",
+      "z.html",
+      "中.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{*,one}/*",
+    "Matches": [
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a/one.html",
+      "a-/dash.html",
+      "b/data.txt",
+      "b/one.html",
+      "braces{a}/one.html",
+      "empty/.keep"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{*,one}/**",
+    "Matches": [
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a/b/two.html",
+      "a/one.html",
+      "a-/dash.html",
+      "b/data.txt",
+      "b/one.html",
+      "braces{a}/one.html",
+      "empty/.keep"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[a-]",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[a-].html",
+    "Matches": [
+      "a.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[a-]/*",
+    "Matches": [
+      "a/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[a-]/**",
+    "Matches": [
+      "a/b/two.html",
+      "a/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[a-b-c]",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[a-b-c].html",
+    "Matches": [
+      "a.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[a-b-c]/*",
+    "Matches": [
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "[a-b-c]/**",
+    "Matches": [
+      "a/b/two.html",
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/*",
+    "Matches": [
+      ".hidden.html",
+      "a.html",
+      "root.html",
+      "z.html",
+      "中.html",
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a/one.html",
+      "a/b/two.html",
+      "a-/dash.html",
+      "b/data.txt",
+      "b/one.html",
+      "braces{a}/one.html",
+      "empty/.keep"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/*.html",
+    "Matches": [
+      ".hidden.html",
+      "a.html",
+      "root.html",
+      "z.html",
+      "中.html",
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a/one.html",
+      "a/b/two.html",
+      "a-/dash.html",
+      "b/one.html",
+      "braces{a}/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/*/*",
+    "Matches": [
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a/one.html",
+      "a-/dash.html",
+      "b/data.txt",
+      "b/one.html",
+      "braces{a}/one.html",
+      "empty/.keep",
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/*/**",
+    "Matches": [
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a/b/two.html",
+      "a/one.html",
+      "a-/dash.html",
+      "b/data.txt",
+      "b/one.html",
+      "braces{a}/one.html",
+      "empty/.keep"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/?",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/?.html",
+    "Matches": [
+      "a.html",
+      "z.html",
+      "中.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/?/*",
+    "Matches": [
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html",
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/?/**",
+    "Matches": [
+      "a/b/two.html",
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/[!a]",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/[!a].html",
+    "Matches": [
+      "z.html",
+      "中.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/[!a]/*",
+    "Matches": [
+      "b/data.txt",
+      "b/one.html",
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/[!a]/**",
+    "Matches": [
+      "b/data.txt",
+      "b/one.html",
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/[a-z]",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/[a-z].html",
+    "Matches": [
+      "a.html",
+      "z.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/[a-z]/*",
+    "Matches": [
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html",
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/[a-z]/**",
+    "Matches": [
+      "a/b/two.html",
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/{one,two}",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/{one,two}.html",
+    "Matches": [
+      "[literal]/one.html",
+      "a/b/two.html",
+      "a/one.html",
+      "b/one.html",
+      "braces{a}/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/{one,two}/*",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/{one,two}/**",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/{*,one}",
+    "Matches": [
+      ".hidden.html",
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a-/dash.html",
+      "a.html",
+      "a/b/two.html",
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html",
+      "braces{a}/one.html",
+      "empty/.keep",
+      "root.html",
+      "z.html",
+      "中.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/{*,one}.html",
+    "Matches": [
+      ".hidden.html",
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a-/dash.html",
+      "a.html",
+      "a/b/two.html",
+      "a/one.html",
+      "b/one.html",
+      "braces{a}/one.html",
+      "root.html",
+      "z.html",
+      "中.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/{*,one}/*",
+    "Matches": [
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a/one.html",
+      "a-/dash.html",
+      "a/b/two.html",
+      "b/data.txt",
+      "b/one.html",
+      "braces{a}/one.html",
+      "empty/.keep"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/{*,one}/**",
+    "Matches": [
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a/b/two.html",
+      "a/one.html",
+      "a-/dash.html",
+      "b/data.txt",
+      "b/one.html",
+      "braces{a}/one.html",
+      "empty/.keep"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/[a-]",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/[a-].html",
+    "Matches": [
+      "a.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/[a-]/*",
+    "Matches": [
+      "a/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/[a-]/**",
+    "Matches": [
+      "a/b/two.html",
+      "a/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/[a-b-c]",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/[a-b-c].html",
+    "Matches": [
+      "a.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/[a-b-c]/*",
+    "Matches": [
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html",
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/[a-b-c]/**",
+    "Matches": [
+      "a/b/two.html",
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/*",
+    "Matches": [
+      "a/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/*.html",
+    "Matches": [
+      "a/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/*/*",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/*/**",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/?",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/?.html",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/?/*",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/?/**",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/[!a]",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/[!a].html",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/[!a]/*",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/[!a]/**",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/[a-z]",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/[a-z].html",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/[a-z]/*",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/[a-z]/**",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/{one,two}",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/{one,two}.html",
+    "Matches": [
+      "a/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/{one,two}/*",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/{one,two}/**",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/{*,one}",
+    "Matches": [
+      "a/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/{*,one}.html",
+    "Matches": [
+      "a/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/{*,one}/*",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/{*,one}/**",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/[a-]",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/[a-].html",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/[a-]/*",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/[a-]/**",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/[a-b-c]",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/[a-b-c].html",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/[a-b-c]/*",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "a/[a-b-c]/**",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/*",
+    "Matches": [
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/*.html",
+    "Matches": [
+      "a/one.html",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/*/*",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/*/**",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/?",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/?.html",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/?/*",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/?/**",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/[!a]",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/[!a].html",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/[!a]/*",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/[!a]/**",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/[a-z]",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/[a-z].html",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/[a-z]/*",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/[a-z]/**",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/{one,two}",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/{one,two}.html",
+    "Matches": [
+      "a/one.html",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/{one,two}/*",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/{one,two}/**",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/{*,one}",
+    "Matches": [
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/{*,one}.html",
+    "Matches": [
+      "a/one.html",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/{*,one}/*",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/{*,one}/**",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/[a-]",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/[a-].html",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/[a-]/*",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/[a-]/**",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/[a-b-c]",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/[a-b-c].html",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/[a-b-c]/*",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "{a,b}/[a-b-c]/**",
+    "Matches": [
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/*",
+    "Matches": [
+      ".hidden.html",
+      "a.html",
+      "root.html",
+      "z.html",
+      "中.html",
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a/one.html",
+      "a/b/two.html",
+      "a-/dash.html",
+      "b/data.txt",
+      "b/one.html",
+      "braces{a}/one.html",
+      "empty/.keep"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/*.html",
+    "Matches": [
+      ".hidden.html",
+      "a.html",
+      "root.html",
+      "z.html",
+      "中.html",
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a/one.html",
+      "a/b/two.html",
+      "a-/dash.html",
+      "b/one.html",
+      "braces{a}/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/*/*",
+    "Matches": [
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a/one.html",
+      "a-/dash.html",
+      "b/data.txt",
+      "b/one.html",
+      "braces{a}/one.html",
+      "empty/.keep",
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/*/**",
+    "Matches": [
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a/b/two.html",
+      "a/one.html",
+      "a-/dash.html",
+      "b/data.txt",
+      "b/one.html",
+      "braces{a}/one.html",
+      "empty/.keep"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/?",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/?.html",
+    "Matches": [
+      "a.html",
+      "z.html",
+      "中.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/?/*",
+    "Matches": [
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html",
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/?/**",
+    "Matches": [
+      "a/b/two.html",
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/[!a]",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/[!a].html",
+    "Matches": [
+      "z.html",
+      "中.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/[!a]/*",
+    "Matches": [
+      "b/data.txt",
+      "b/one.html",
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/[!a]/**",
+    "Matches": [
+      "b/data.txt",
+      "b/one.html",
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/[a-z]",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/[a-z].html",
+    "Matches": [
+      "a.html",
+      "z.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/[a-z]/*",
+    "Matches": [
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html",
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/[a-z]/**",
+    "Matches": [
+      "a/b/two.html",
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/{one,two}",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/{one,two}.html",
+    "Matches": [
+      "[literal]/one.html",
+      "a/b/two.html",
+      "a/one.html",
+      "b/one.html",
+      "braces{a}/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/{one,two}/*",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/{one,two}/**",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/{*,one}",
+    "Matches": [
+      ".hidden.html",
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a-/dash.html",
+      "a.html",
+      "a/b/two.html",
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html",
+      "braces{a}/one.html",
+      "empty/.keep",
+      "root.html",
+      "z.html",
+      "中.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/{*,one}.html",
+    "Matches": [
+      ".hidden.html",
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a-/dash.html",
+      "a.html",
+      "a/b/two.html",
+      "a/one.html",
+      "b/one.html",
+      "braces{a}/one.html",
+      "root.html",
+      "z.html",
+      "中.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/{*,one}/*",
+    "Matches": [
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a/one.html",
+      "a-/dash.html",
+      "a/b/two.html",
+      "b/data.txt",
+      "b/one.html",
+      "braces{a}/one.html",
+      "empty/.keep"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/{*,one}/**",
+    "Matches": [
+      ".hidden/inside.html",
+      "[literal]/one.html",
+      "a/b/two.html",
+      "a/one.html",
+      "a-/dash.html",
+      "b/data.txt",
+      "b/one.html",
+      "braces{a}/one.html",
+      "empty/.keep"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/[a-]",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/[a-].html",
+    "Matches": [
+      "a.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/[a-]/*",
+    "Matches": [
+      "a/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/[a-]/**",
+    "Matches": [
+      "a/b/two.html",
+      "a/one.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/[a-b-c]",
+    "Matches": null,
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/[a-b-c].html",
+    "Matches": [
+      "a.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/[a-b-c]/*",
+    "Matches": [
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html",
+      "a/b/two.html"
+    ],
+    "BadPattern": false
+  },
+  {
+    "Pattern": "**/**/[a-b-c]/**",
+    "Matches": [
+      "a/b/two.html",
+      "a/one.html",
+      "b/data.txt",
+      "b/one.html"
+    ],
+    "BadPattern": false
+  }
+]
