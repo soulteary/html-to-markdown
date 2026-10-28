@@ -52,7 +52,7 @@ for (case, mode), rounds in cases.items():
                      time_change_bootstrap_95=[bootstrap[125], bootstrap[4874]]))
 fields = [key for key in rows[0] if key != 'time_change_bootstrap_95']
 with args.csv.open('w', encoding='utf-8', newline='') as file:
-    writer = csv.DictWriter(file, fieldnames=fields)
+    writer = csv.DictWriter(file, fieldnames=fields, lineterminator="\n")
     writer.writeheader()
     writer.writerows({key: row[key] for key in fields} for row in rows)
 if args.json:
