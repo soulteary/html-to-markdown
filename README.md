@@ -356,7 +356,7 @@ You found a bug?
 
 This library produces markdown that is readable and can be changed by humans.
 
-Once you convert this markdown back to HTML (e.g. using [goldmark](https://github.com/yuin/goldmark) or [blackfriday](https://github.com/russross/blackfriday)) you need to be careful of malicious content.
+When rendering the generated Markdown as HTML, you need to be careful of malicious content.
 
 This library does NOT sanitize untrusted content. Use an HTML sanitizer such as [bluemonday](https://github.com/microcosm-cc/bluemonday) before displaying the HTML in the browser.
 

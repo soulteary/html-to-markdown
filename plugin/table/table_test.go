@@ -24,7 +24,7 @@ func TestGoldenFiles(t *testing.T) {
 		return conv.ConvertReader(bytes.NewReader(htmlInput))
 	}
 
-	tester.GoldenFiles(t, goldenFileConvert, goldenFileConvert)
+	tester.GoldenFiles(t, goldenFileConvert)
 }
 
 func TestOptionFunc_Validation(t *testing.T) {

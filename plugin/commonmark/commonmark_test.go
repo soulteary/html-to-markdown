@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"testing"
 
-	htmltomarkdown "github.com/JohannesKaufmann/html-to-markdown/v2"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/tester"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/base"
@@ -26,19 +25,7 @@ func TestGoldenFiles(t *testing.T) {
 
 		return conv.ConvertReader(bytes.NewReader(htmlInput))
 	}
-	roundTripConvert := func(html []byte) (markdown []byte, err error) {
-		// For the golden files we are keeping #comment as a block
-		// but collapse treats it as an inline element (which it is).
-		//
-		// So this testcase would cause problems.
-		// "<div>before    <!-- -->    after</div>"
-
-		md, err := htmltomarkdown.ConvertString(string(html))
-
-		return []byte(md), err
-	}
-
-	tester.GoldenFiles(t, goldenFileConvert, roundTripConvert)
+	tester.GoldenFiles(t, goldenFileConvert)
 }
 
 func TestOptionFunc(t *testing.T) {
