@@ -5,7 +5,7 @@
 | Metric | Value |
 | ------ | ----- |
 | Files | 142 |
-| Issues | 10 |
+| Issues | 11 |
 
 ## Checks
 
@@ -16,7 +16,7 @@
 | ineffassign | 100% |
 | gocyclo | 96% |
 | license | 100% |
-| misspell | 97% |
+| misspell | 96% |
 
 ## Issues
 
@@ -27,23 +27,28 @@
 
 ### gocyclo
 
+- `plugin/commonmark/render_code.go`
+  - Line 115: cyclomatic complexity 23 for function getCodeWithoutTags
+- `collapse/collapse.go`
+  - Line 106: cyclomatic complexity 22 for function Collapse
 - `collapse/whitespace.go`
   - Line 12: cyclomatic complexity 21 for function replaceAnyWhitespaceWithSpace
 - `plugin/commonmark/code_tables.go`
   - Line 22: cyclomatic complexity 32 for function unwrapCodeTables
 - `converter/input_markers.go`
   - Line 18: cyclomatic complexity 24 for function protectInputMarkers
-- `plugin/commonmark/render_code.go`
-  - Line 115: cyclomatic complexity 23 for function getCodeWithoutTags
-- `collapse/collapse.go`
-  - Line 106: cyclomatic complexity 22 for function Collapse
 
 ### misspell
 
-- `internal/domutils/neighbors.go`
-  - Line 30: "continously" is a misspelling of "continuously"
+- `.github/goreportcard-report.md`
+  - Line 44: "continously" is a misspelling of "continuously"
+  - Line 46: "seperates" is a misspelling of "separates"
+  - Line 48: "seperated" is a misspelling of "separated"
+  - Line 50: "overriden" is a misspelling of "overridden"
 - `internal/domutils/list_end_comment.go`
   - Line 59: "seperates" is a misspelling of "separates"
+- `internal/domutils/neighbors.go`
+  - Line 30: "continously" is a misspelling of "continuously"
 - `plugin/commonmark/render_image.go`
   - Line 62: "seperated" is a misspelling of "separated"
 - `plugin/commonmark/validation.go`
