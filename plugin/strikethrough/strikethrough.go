@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"unicode"
 
-	"github.com/JohannesKaufmann/dom"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/escape"
@@ -74,7 +73,7 @@ func (s *strikethroughPlugin) handleUnEscapers(chars []byte, index int) int {
 }
 
 func nameIsStrikethough(node *html.Node) bool {
-	name := dom.NodeName(node)
+	name := domutils.NodeName(node)
 
 	return name == "del" || name == "s" || name == "strike"
 }

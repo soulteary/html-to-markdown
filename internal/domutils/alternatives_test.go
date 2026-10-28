@@ -1,9 +1,10 @@
-package domutils
+package domutils_test
 
 import (
 	"context"
 	"testing"
 
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/tester"
 )
 
@@ -74,7 +75,7 @@ func TestLeafBlockAlternatives(t *testing.T) {
 		t.Run(run.desc, func(t *testing.T) {
 			doc := tester.Parse(t, run.input, "")
 
-			LeafBlockAlternatives(context.TODO(), doc)
+			domutils.LeafBlockAlternatives(context.TODO(), doc)
 
 			tester.ExpectRepresentation(t, doc, "output", run.expected)
 		})

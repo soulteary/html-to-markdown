@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"regexp"
 
-	"github.com/JohannesKaufmann/dom"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/textutils"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/marker"
 	"golang.org/x/net/html"
@@ -104,7 +104,7 @@ func escapePoundSignAtEnd(s []byte) []byte {
 func (c *commonmark) renderHeading(ctx converter.Context, w converter.Writer, n *html.Node) converter.RenderStatus {
 	// ctx = context.WithValue(ctx, "is_inside_heading", true)
 
-	level := getHeadingLevel(dom.NodeName(n))
+	level := getHeadingLevel(domutils.NodeName(n))
 
 	var buf bytes.Buffer
 	ctx.RenderChildNodes(ctx, &buf, n)

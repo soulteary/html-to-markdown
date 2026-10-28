@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"unicode/utf8"
 
-	"github.com/JohannesKaufmann/dom"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"golang.org/x/net/html"
 )
 
@@ -45,7 +45,7 @@ func fillUpRows(rows [][][]byte, maxColumnCount int) [][][]byte {
 }
 
 func getNumberAttributeOr(node *html.Node, key string, fallback int) int {
-	val, ok := dom.GetAttribute(node, key)
+	val, ok := domutils.GetAttribute(node, key)
 	if !ok {
 		return fallback
 	}

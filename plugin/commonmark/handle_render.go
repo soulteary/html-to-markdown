@@ -1,13 +1,13 @@
 package commonmark
 
 import (
-	"github.com/JohannesKaufmann/dom"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"golang.org/x/net/html"
 )
 
 func (c *commonmark) handleRender(ctx converter.Context, w converter.Writer, n *html.Node) converter.RenderStatus {
-	name := dom.NodeName(n)
+	name := domutils.NodeName(n)
 
 	switch name {
 	case "strong", "b",

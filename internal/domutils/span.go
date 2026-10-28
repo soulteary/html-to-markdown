@@ -3,12 +3,11 @@ package domutils
 import (
 	"context"
 
-	"github.com/JohannesKaufmann/dom"
 	"golang.org/x/net/html"
 )
 
 func isFakeSpan(node *html.Node) bool {
-	name := dom.NodeName(node)
+	name := NodeName(node)
 	if name != "span" {
 		return false
 	}
@@ -17,8 +16,8 @@ func isFakeSpan(node *html.Node) bool {
 
 	var finder func(*html.Node)
 	finder = func(node *html.Node) {
-		name := dom.NodeName(node)
-		if dom.NameIsBlockNode(name) {
+		name := NodeName(node)
+		if NameIsBlockNode(name) {
 			containsBlockNode = true
 			return
 		}

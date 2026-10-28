@@ -1,8 +1,8 @@
 package base
 
 import (
-	"github.com/JohannesKaufmann/dom"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"golang.org/x/net/html"
 )
 
@@ -13,7 +13,7 @@ import (
 //
 //	"A text with <strong>bold</strong> and *italic* text"`
 func RenderAsHTML(ctx converter.Context, w converter.Writer, node *html.Node) converter.RenderStatus {
-	tagName := dom.NodeName(node)
+	tagName := domutils.NodeName(node)
 	tagType, _ := ctx.GetTagType(tagName)
 
 	if tagType == converter.TagTypeBlock {
@@ -30,7 +30,7 @@ func RenderAsHTML(ctx converter.Context, w converter.Writer, node *html.Node) co
 // RenderAsHTMLWrapper will render the node as HTML
 // and render the children as markdown.
 func RenderAsHTMLWrapper(ctx converter.Context, w converter.Writer, node *html.Node) converter.RenderStatus {
-	name := dom.NodeName(node)
+	name := domutils.NodeName(node)
 
 	w.WriteString("<")
 	w.WriteString(name)
@@ -47,7 +47,7 @@ func RenderAsHTMLWrapper(ctx converter.Context, w converter.Writer, node *html.N
 
 // RenderAsPlaintextWrapper will keep the children of this node as markdown.
 func RenderAsPlaintextWrapper(ctx converter.Context, w converter.Writer, node *html.Node) converter.RenderStatus {
-	tagName := dom.NodeName(node)
+	tagName := domutils.NodeName(node)
 	tagType, _ := ctx.GetTagType(tagName)
 
 	if tagType == converter.TagTypeBlock {

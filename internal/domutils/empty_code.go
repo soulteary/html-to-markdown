@@ -3,7 +3,6 @@ package domutils
 import (
 	"context"
 
-	"github.com/JohannesKaufmann/dom"
 	"golang.org/x/net/html"
 )
 
@@ -28,7 +27,7 @@ func hasTextChildNodes(startNode *html.Node) bool {
 // IsInsidePre reports whether a node belongs to a preformatted block.
 func IsInsidePre(node *html.Node) bool {
 	for parent := node.Parent; parent != nil; parent = parent.Parent {
-		if dom.NodeName(parent) == "pre" {
+		if NodeName(parent) == "pre" {
 			return true
 		}
 	}
@@ -38,15 +37,15 @@ func IsInsidePre(node *html.Node) bool {
 func RemoveEmptyCode(ctx context.Context, doc *html.Node) {
 	node := doc
 	for node != nil {
-		if dom.NodeName(node) == "code" && !IsInsidePre(node) && !hasTextChildNodes(node) {
-			next := dom.GetNextNeighborNodeExcludingOwnChild(node)
+		if NodeName(node) == "code" && !IsInsidePre(node) && !hasTextChildNodes(node) {
+			next := GetNextNeighborNodeExcludingOwnChild(node)
 
-			dom.RemoveNode(node)
+			RemoveNode(node)
 
 			node = next
 			continue
 		}
 
-		node = dom.GetNextNeighborNode(node)
+		node = GetNextNeighborNode(node)
 	}
 }

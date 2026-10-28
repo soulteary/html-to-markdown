@@ -3,7 +3,6 @@ package domutils
 import (
 	"context"
 
-	"github.com/JohannesKaufmann/dom"
 	"golang.org/x/net/html"
 )
 
@@ -59,7 +58,7 @@ func preAlternative(ctx context.Context, node *html.Node) {
 	node.Data = "code"
 }
 func hrAlternative(ctx context.Context, node *html.Node) {
-	dom.RemoveNode(node)
+	RemoveNode(node)
 }
 
 // TODO: make this configurable via the options?
@@ -78,7 +77,7 @@ var alternatives = map[string]func(ctx context.Context, node *html.Node){
 func LeafBlockAlternatives(ctx context.Context, doc *html.Node) {
 	var finder func(node *html.Node, isInsideLeafBlock bool, isInsideInline bool)
 	finder = func(node *html.Node, isInsideLeafBlock bool, isInsideInline bool) {
-		name := dom.NodeName(node)
+		name := NodeName(node)
 
 		structure := getMarkdownStructure(name)
 		if (structure == "container_block" || structure == "leaf_block") && (isInsideLeafBlock || isInsideInline) {

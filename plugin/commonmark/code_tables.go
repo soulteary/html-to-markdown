@@ -4,12 +4,12 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/JohannesKaufmann/dom"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"golang.org/x/net/html"
 )
 
 func hasClass(n *html.Node, class string) bool {
-	for _, name := range strings.Fields(dom.GetAttributeOr(n, "class", "")) {
+	for _, name := range strings.Fields(domutils.GetAttributeOr(n, "class", "")) {
 		if name == class {
 			return true
 		}
@@ -30,7 +30,7 @@ func unwrapCodeTables(doc *html.Node) {
 		if n.Type != html.ElementNode || n.Data != "table" || n.Parent == nil {
 			return
 		}
-		rows := dom.FindAllNodes(n, func(c *html.Node) bool { return dom.NodeName(c) == "tr" })
+		rows := domutils.FindAllNodes(n, func(c *html.Node) bool { return domutils.NodeName(c) == "tr" })
 		if len(rows) != 1 {
 			return
 		}
@@ -70,8 +70,8 @@ func unwrapCodeTables(doc *html.Node) {
 				}
 			}
 		}
-		gutter := dom.FindAllNodes(cells[0], func(c *html.Node) bool { return dom.NodeName(c) == "pre" })
-		code := dom.FindAllNodes(cells[1], func(c *html.Node) bool { return dom.NodeName(c) == "pre" })
+		gutter := domutils.FindAllNodes(cells[0], func(c *html.Node) bool { return domutils.NodeName(c) == "pre" })
+		code := domutils.FindAllNodes(cells[1], func(c *html.Node) bool { return domutils.NodeName(c) == "pre" })
 		if len(gutter) != 1 || len(code) != 1 {
 			return
 		}

@@ -1,7 +1,7 @@
 package collapse
 
 import (
-	"github.com/JohannesKaufmann/dom"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"golang.org/x/net/html"
 )
 
@@ -15,7 +15,7 @@ var voidElements = []string{
 }
 
 var defaultIsBlockNode = func(node *html.Node) bool {
-	name := dom.NodeName(node)
+	name := domutils.NodeName(node)
 
 	for _, elem := range blockElements {
 		if elem == name {
@@ -25,7 +25,7 @@ var defaultIsBlockNode = func(node *html.Node) bool {
 	return false
 }
 var defaultIsVoidNode = func(node *html.Node) bool {
-	name := dom.NodeName(node)
+	name := domutils.NodeName(node)
 
 	for _, elem := range voidElements {
 		if elem == name {
@@ -37,7 +37,7 @@ var defaultIsVoidNode = func(node *html.Node) bool {
 var defaultIsPreformattedNode = func(node *html.Node) bool {
 	// Note: Originally in the javascript version, this just checked for "pre".
 	// I changed it, to also return true for "code"
-	name := dom.NodeName(node)
+	name := domutils.NodeName(node)
 
 	return name == "pre" || name == "code"
 }

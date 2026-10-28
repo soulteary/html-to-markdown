@@ -4,7 +4,6 @@ import (
 	"context"
 	"strings"
 
-	"github.com/JohannesKaufmann/dom"
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
 )
@@ -15,7 +14,7 @@ func MoveListItems(ctx context.Context, n *html.Node) {
 		var previousLi *html.Node
 
 		// Collect children to avoid modifying the slice while iterating.
-		children := dom.AllChildNodes(n)
+		children := AllChildNodes(n)
 
 		for _, child := range children {
 			if child.Type == html.ElementNode && child.Data == "li" {
@@ -41,7 +40,7 @@ func MoveListItems(ctx context.Context, n *html.Node) {
 						DataAtom: atom.Li,
 						Data:     "li",
 					}
-					previousLi = dom.WrapNode(child, newNode)
+					previousLi = WrapNode(child, newNode)
 				}
 			}
 		}

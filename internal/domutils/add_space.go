@@ -3,17 +3,16 @@ package domutils
 import (
 	"context"
 
-	"github.com/JohannesKaufmann/dom"
 	"golang.org/x/net/html"
 )
 
 func getFirstChildNode(startNode *html.Node, matchFn func(n *html.Node) bool) *html.Node {
 	node := startNode.FirstChild
 	for node != nil {
-		name := dom.NodeName(node)
+		name := NodeName(node)
 		if name == "span" {
 			// A span has no special meaning. So we just skip it...
-			node = dom.GetNextNeighborNode(node)
+			node = GetNextNeighborNode(node)
 		} else if matchFn(node) {
 			return node
 		} else {
@@ -27,10 +26,10 @@ func getFirstChildNode(startNode *html.Node, matchFn func(n *html.Node) bool) *h
 func getLastChildNode(startNode *html.Node, matchFn func(n *html.Node) bool) *html.Node {
 	node := startNode.LastChild
 	for node != nil {
-		name := dom.NodeName(node)
+		name := NodeName(node)
 		if name == "span" {
 			// A span has no special meaning. So we just skip it...
-			node = dom.GetPrevNeighborNode(node)
+			node = GetPrevNeighborNode(node)
 		} else if matchFn(node) {
 			return node
 		} else {
@@ -61,6 +60,6 @@ func AddSpace(ctx context.Context, doc *html.Node, isOuterNode, isInnerNode func
 			}
 		}
 
-		node = dom.GetNextNeighborElement(node)
+		node = GetNextNeighborElement(node)
 	}
 }

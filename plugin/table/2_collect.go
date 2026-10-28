@@ -3,8 +3,8 @@ package table
 import (
 	"bytes"
 
-	"github.com/JohannesKaufmann/dom"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/marker"
 	"golang.org/x/net/html"
 	"golang.org/x/net/html/atom"
@@ -21,10 +21,10 @@ func containsNewline(b []byte) bool {
 }
 
 func hasProblematicChildNode(node *html.Node) bool {
-	problematicNode := dom.FindFirstNode(node, func(n *html.Node) bool {
-		name := dom.NodeName(n)
+	problematicNode := domutils.FindFirstNode(node, func(n *html.Node) bool {
+		name := domutils.NodeName(n)
 
-		if dom.NameIsHeading(name) {
+		if domutils.NameIsHeading(name) {
 			return true
 		}
 		switch name {
@@ -50,7 +50,7 @@ func hasProblematicParentNode(node *html.Node) bool {
 	p := node.Parent
 
 	for p != nil {
-		name := dom.NodeName(p)
+		name := domutils.NodeName(p)
 		if name == "a" {
 			return true
 		}
@@ -70,7 +70,7 @@ func hasProblematicParentNode(node *html.Node) bool {
 	return false
 }
 func (p *tablePlugin) collectTableContent(ctx converter.Context, node *html.Node) *tableContent {
-	if role := dom.GetAttributeOr(node, "role", ""); role == "presentation" {
+	if role := domutils.GetAttributeOr(node, "role", ""); role == "presentation" {
 		// In HTML-Emails many tables are used. Oftentimes these tables are nested
 		// which is not possible with markdown. But these tables are mostly used
 		// for *layout purposes* rather than displaying actual tabular data.
@@ -151,14 +151,14 @@ func collectAlignments(headerRowNode *html.Node, rowNodes []*html.Node) []string
 		return nil
 	}
 
-	cellNodes := dom.FindAllNodes(firstRow, func(node *html.Node) bool {
-		name := dom.NodeName(node)
+	cellNodes := domutils.FindAllNodes(firstRow, func(node *html.Node) bool {
+		name := domutils.NodeName(node)
 		return name == "th" || name == "td"
 	})
 
 	var alignments []string
 	for _, cellNode := range cellNodes {
-		align := dom.GetAttributeOr(cellNode, "align", "")
+		align := domutils.GetAttributeOr(cellNode, "align", "")
 
 		alignments = append(alignments, align)
 	}
@@ -166,8 +166,8 @@ func collectAlignments(headerRowNode *html.Node, rowNodes []*html.Node) []string
 	return alignments
 }
 func (p *tablePlugin) collectCellsInRow(ctx converter.Context, rowIndex int, rowNode *html.Node) ([][]byte, []modification) {
-	cellNodes := dom.FindAllNodes(rowNode, func(node *html.Node) bool {
-		name := dom.NodeName(node)
+	cellNodes := domutils.FindAllNodes(rowNode, func(node *html.Node) bool {
+		name := domutils.NodeName(node)
 		return name == "th" || name == "td"
 	})
 
@@ -238,7 +238,7 @@ func (p *tablePlugin) collectRows(ctx converter.Context, headerRowNode *html.Nod
 }
 
 func collectCaption(ctx converter.Context, node *html.Node) []byte {
-	captionNode := dom.FindFirstNode(node, func(node *html.Node) bool {
+	captionNode := domutils.FindFirstNode(node, func(node *html.Node) bool {
 		return node.DataAtom == atom.Caption
 	})
 	if captionNode == nil {

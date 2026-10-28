@@ -46,7 +46,7 @@ package collapse
 import (
 	"strings"
 
-	"github.com/JohannesKaufmann/dom"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"golang.org/x/net/html"
 )
 
@@ -136,14 +136,14 @@ func Collapse(element *html.Node, domFuncs *DomFuncs) {
 
 			prevText = node
 		} else if node.Type == html.ElementNode { // Node.ELEMENT_NODE
-			if domFuncs.IsBlockNode(node) || dom.NodeName(node) == "br" {
+			if domFuncs.IsBlockNode(node) || domutils.NodeName(node) == "br" {
 				if prevText != nil {
 					prevText.Data = strings.TrimSuffix(prevText.Data, " ")
 				}
 
 				prevText = nil
 				keepLeadingWs = false
-			} else if domFuncs.IsVoidNode(node) || domFuncs.IsPreformattedNode(node) || dom.NodeName(node) == "code" {
+			} else if domFuncs.IsVoidNode(node) || domFuncs.IsPreformattedNode(node) || domutils.NodeName(node) == "code" {
 				// Avoid trimming space around non-block, non-BR void elements and inline PRE.
 				prevText = nil
 				keepLeadingWs = true

@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"strings"
 
-	"github.com/JohannesKaufmann/dom"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/textutils"
 	"golang.org/x/net/html"
 )
@@ -47,7 +47,7 @@ func (c *commonmark) renderLinkInlined(w converter.Writer, l *link) converter.Re
 func (c *commonmark) renderLink(ctx converter.Context, w converter.Writer, n *html.Node) converter.RenderStatus {
 	ctx = ctx.WithValue("is_inside_link", true)
 
-	href := dom.GetAttributeOr(n, "href", "")
+	href := domutils.GetAttributeOr(n, "href", "")
 
 	href = strings.TrimSpace(href)
 	href = ctx.AssembleAbsoluteURL(ctx, "a", href)
@@ -58,7 +58,7 @@ func (c *commonmark) renderLink(ctx converter.Context, w converter.Writer, n *ht
 		return converter.RenderTryNext
 	}
 
-	title := dom.GetAttributeOr(n, "title", "")
+	title := domutils.GetAttributeOr(n, "title", "")
 	title = strings.ReplaceAll(title, "\n", " ")
 
 	l := &link{

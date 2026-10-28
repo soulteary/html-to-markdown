@@ -1,9 +1,10 @@
-package domutils
+package domutils_test
 
 import (
 	"context"
 	"testing"
 
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/tester"
 )
 
@@ -65,7 +66,7 @@ func TestRemoveEmptyCode(t *testing.T) {
 
 			tester.ExpectRepresentation(t, doc, "before", run.expectedBefore)
 
-			RemoveEmptyCode(context.TODO(), doc)
+			domutils.RemoveEmptyCode(context.TODO(), doc)
 
 			tester.ExpectRepresentation(t, doc, "output", run.expectedAfter)
 		})

@@ -1,9 +1,9 @@
-package domutils
+package domutils_test
 
 import (
 	"testing"
 
-	"github.com/JohannesKaufmann/dom"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/tester"
 	"golang.org/x/net/html"
 )
@@ -89,13 +89,13 @@ func TestRemoveRedundant(t *testing.T) {
 		t.Run(run.desc, func(t *testing.T) {
 			doc := tester.Parse(t, run.input, "")
 
-			RemoveRedundant(doc, func(a, b *html.Node) bool {
+			domutils.RemoveRedundant(doc, func(a, b *html.Node) bool {
 				isItalic := func(n *html.Node) bool {
-					name := dom.NodeName(n)
+					name := domutils.NodeName(n)
 					return name == "em" || name == "i"
 				}
 				isBold := func(n *html.Node) bool {
-					name := dom.NodeName(n)
+					name := domutils.NodeName(n)
 					return name == "strong" || name == "b"
 				}
 
