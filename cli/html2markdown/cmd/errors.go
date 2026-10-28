@@ -3,8 +3,6 @@ package cmd
 import (
 	"fmt"
 	"io"
-
-	"github.com/muesli/termenv"
 )
 
 type CLIError struct {
@@ -57,10 +55,5 @@ func (cli CLI) PrintWarn(err error) {
 		return
 	}
 
-	output := termenv.NewOutput(cli.Stderr)
-
-	prefix := output.String("warning:").Background(termenv.ANSIYellow).Foreground(termenv.ANSIBrightWhite).String()
-	message := output.String(err.Error()).Foreground(termenv.ANSIYellow).String()
-
-	fmt.Fprintf(cli.Stderr, "\n%s %s\n\n", prefix, message)
+	fmt.Fprintf(cli.Stderr, "\nwarning: %s\n\n", err.Error())
 }

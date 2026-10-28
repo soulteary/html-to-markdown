@@ -3,8 +3,6 @@ package cmd
 import (
 	"fmt"
 	"io"
-
-	"github.com/muesli/termenv"
 )
 
 type Printer interface {
@@ -18,17 +16,13 @@ type coloredBox struct {
 	text   string
 }
 
+// ColoredBox retains the existing printer API but now emits plain text.
 func ColoredBox(prefix string, text string) Printer {
 	return &coloredBox{prefix, text}
 }
 
 func (p coloredBox) Print(w io.Writer) {
-	output := termenv.NewOutput(w)
-
-	prefix := output.String(p.prefix + ":").Background(termenv.ANSIRed).Foreground(termenv.ANSIBrightWhite).String()
-	message := output.String(p.text).Foreground(termenv.ANSIRed).String()
-
-	fmt.Fprintf(w, "%s %s\n", prefix, message)
+	fmt.Fprintf(w, "%s: %s\n", p.prefix, p.text)
 }
 
 // - - - - - - - //
