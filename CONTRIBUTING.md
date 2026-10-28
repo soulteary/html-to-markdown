@@ -25,6 +25,21 @@ Keep rendering changes covered by a focused regression test or a golden fixture.
 Run `go test ./examples/...` when editing examples; also run a changed example
 with `go run ./examples/<name>` before updating its documented output.
 
+## Generated quality reports
+
+The Go workflow preserves the six Go/OS build, vet, and race-test checks and
+runs coverage reporting and Go Report Card on Ubuntu. Download the
+`go-quality-reports` artifact from a workflow run to inspect the Markdown/JSON
+reports and raw test results. Coverage includes examples and internal helpers;
+there is currently no total or per-package percentage gate.
+
+The five stable files under `.github/` (`coverage.svg`, `go-test-report.md`,
+`go-test-report.json`, `goreportcard.svg`, and `goreportcard-report.md`) are
+generated. Do not edit their scores or findings by hand. Successful `main` runs
+refresh them after all checks pass, provided the tested revision is still the
+branch head. PR checks do not write to the repository. Raw results are ignored
+by Git and retained only as workflow artifacts.
+
 ## Golden fixtures
 
 Plugin golden tests pair `.in.html` and `.out.md` files under each plugin's

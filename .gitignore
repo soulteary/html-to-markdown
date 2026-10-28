@@ -3,3 +3,6 @@
 *.test.exe
 /coverage.out
 /coverage.txt
+
+# Raw quality reports are uploaded as CI artifacts.
+.github/test-results/

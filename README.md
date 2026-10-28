@@ -1,5 +1,9 @@
 # html-to-markdown
 
+[![Go](https://github.com/soulteary/html-to-markdown/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/soulteary/html-to-markdown/actions/workflows/go.yml)
+[![Go Test Coverage](./.github/coverage.svg)](./.github/go-test-report.md)
+[![Go Report Card](./.github/goreportcard.svg)](./.github/goreportcard-report.md)
+
 A Go library for converting HTML to Markdown, with CommonMark rendering,
 configurable plugins, and custom element renderers.
 
@@ -140,6 +144,31 @@ are compared byte-for-byte; updates are explicit and should be reviewed.
 [Contributing](CONTRIBUTING.md) documents tests, fixture updates, and repository
 layout. CI builds and tests the library and examples on Linux, macOS, and Windows
 with the minimum supported Go version and the current stable version.
+
+## Quality reports
+
+CI uses [go-test-report-action](https://github.com/soulteary/go-test-report-action)
+to generate a coverage badge, Markdown and JSON reports, and raw race-test
+results for all packages, including examples and test helpers. Coverage is
+reported without a percentage gate; it measures executed statements, not every
+possible input or the absence of bugs.
+[Go Report Card](https://github.com/soulteary/goreportcard-action) generates the
+code quality badge and report.
+
+Every run uploads these files as the `go-quality-reports` workflow artifact,
+including available diagnostics when a check fails. The badges above link to
+the latest committed reports. Pull request checks have read-only access. On
+successful pushes or manual runs on `main`, a separate publishing job updates
+the five stable report files only after all six platform checks and the report
+job pass, and only if `main` still points to the tested revision. Raw results
+stay in workflow artifacts. Report commits use `[skip ci]` to avoid a loop.
+
+To inspect coverage locally:
+
+```sh
+go test -race "-coverprofile=coverage.out" -covermode=atomic ./...
+go tool cover -func=coverage.out
+```
 
 ## Security and license
 
