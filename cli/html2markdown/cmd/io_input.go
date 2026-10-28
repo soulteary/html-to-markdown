@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/bmatcuk/doublestar/v4"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/pathglob"
 )
 
 type input struct {
@@ -31,7 +31,7 @@ func (cli *CLI) listInputs() ([]*input, error) {
 	// This improves interoperability with other tools like `xargs`.
 	// https://github.com/JohannesKaufmann/html-to-markdown/issues/170
 	if cli.config.inputFilepath != "" {
-		matches, err := doublestar.FilepathGlob(cli.config.inputFilepath, doublestar.WithFilesOnly(), doublestar.WithNoFollow())
+		matches, err := pathglob.Files(cli.config.inputFilepath)
 		if err != nil {
 			return nil, err
 		}

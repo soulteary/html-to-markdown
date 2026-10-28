@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/bmatcuk/doublestar/v4"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/pathglob"
 )
 
 type outputType string
@@ -81,9 +81,7 @@ func determineOutputType(_inputPath string, countInputs int, outputPath string) 
 }
 
 func calculateOutputPaths(inputFilepath string, inputs []*input) error {
-	globBase, _ := doublestar.SplitPattern(
-		filepath.ToSlash(filepath.Clean(inputFilepath)),
-	)
+	globBase := pathglob.Base(inputFilepath)
 
 	allBasenames := make(map[string]int)
 	for _, input := range inputs {
