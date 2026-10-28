@@ -3,6 +3,7 @@ package domutils
 import (
 	"context"
 	"golang.org/x/net/html"
+	"slices"
 	"testing"
 )
 
@@ -131,5 +132,31 @@ func TestListEndBoundaries(t *testing.T) {
 	AddListEndComments(context.Background(), root)
 	if a.NextSibling.Type != html.CommentNode || a.NextSibling.Data != ListEndCommentData || a.NextSibling.NextSibling != b {
 		t.Fatal("adjacent lists need exactly one separator")
+	}
+}
+
+func TestLeafAlternativesPreserveSiblingOrderDuringMutation(t *testing.T) {
+	root := &html.Node{Type: html.ElementNode, Data: "strong"}
+	for _, tag := range []string{"h1", "hr", "blockquote", "pre", "span", "hr"} {
+		n := &html.Node{Type: html.ElementNode, Data: tag}
+		if tag != "hr" {
+			n.AppendChild(&html.Node{Type: html.TextNode, Data: tag})
+		}
+		root.AppendChild(n)
+	}
+	LeafBlockAlternatives(context.Background(), root)
+	want := []string{"strong", "br", "#text", "span", "#text", "code", "span"}
+	var names []string
+	for n := root.FirstChild; n != nil; n = n.NextSibling {
+		names = append(names, NodeName(n))
+		if n.Parent != root {
+			t.Fatal("replacement lost parent link")
+		}
+	}
+	if !slices.Equal(names, want) {
+		t.Fatalf("alternative sibling order: %v; want %v", names, want)
+	}
+	if root.FirstChild.FirstChild.Data != "h1" || root.LastChild.FirstChild.Data != "span" {
+		t.Fatal("alternative traversal changed retained text")
 	}
 }

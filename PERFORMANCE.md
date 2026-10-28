@@ -3,7 +3,8 @@
 Use Go 1.27.3 or newer. The end-to-end benchmarks in
 `performance_benchmark_test.go` cover small fragments, repeated article
 sections, dense Markdown punctuation with Unicode, links/images, many sibling
-nodes, and tables with formatted cells. They include HTML parsing, DOM
+nodes, wide trees with removable siblings, long Unicode text, deep trees, and
+tables with formatted cells. They include HTML parsing, DOM
 normalization, rendering, escaping, and result allocation.
 
 Each workload has two modes:
@@ -110,3 +111,52 @@ measurements do not establish a uniform speed improvement over upstream.
 Allocation figures were more consistent than timing. All six compared workload
 outputs matched; this does not imply equivalence for inputs covered by the
 fork's additional rendering fixes.
+
+## DOM traversal and text buffers
+
+The removal and leaf-block pre-render walks process children from right to left,
+matching the former deferred-call order. Each step saves the previous sibling
+before visiting a node that may be removed or gain new neighbors. This removes
+one deferred-call allocation per visited child in these passes.
+
+`RenderChildNodes` keeps its original snapshot semantics: a custom renderer may
+remove, insert, or reorder siblings without changing the current render list.
+Snapshots with up to eight children use local storage; wider snapshots count
+the remaining children and allocate one precisely sized slice. Tests cover
+empty, small, boundary, and wide snapshots, including DOM mutations while
+rendering, and enforce the zero/one-allocation budgets.
+
+Newline normalization retains its ASCII-space rules and returns independent
+storage. Unchanged text uses a clone fast path. Changed text is sized from the
+retained byte count and written once, without a temporary space buffer. This
+also avoids retaining an input-sized allocation when a long newline run shrinks
+to a few bytes. Differential tests compare against the previous rune-based
+algorithm for Unicode, malformed UTF-8, whitespace combinations, and fuzz input.
+
+Run the focused benchmarks and optional fuzz campaign with:
+
+```sh
+go test -run '^$' -bench BenchmarkRenderChildNodes -benchmem -count=5 ./converter
+go test -run '^$' -bench BenchmarkNewlineBuffer -benchmem -count=5 ./internal/textutils
+go test -run '^$' -fuzz FuzzNewlineBufferCompatibility -fuzztime=15s -parallel=2 ./internal/textutils
+```
+
+Development measurements compared baseline main `18d37e9` with these changes on
+Apple M5 / darwin-arm64, using Go 1.27.3 for both versions. A separate comparison
+module checked identical output, then alternated before/after order for five
+250 ms samples per workload and mode. Median `Reuse` results were:
+
+- Article: 0.679 ms to 0.593 ms; 10,572 to 7,288 allocations/op.
+- Many sibling nodes: 1.111 ms to 0.903 ms; 21,116 to 12,090 allocations/op.
+- Dense Markdown text: 0.678 ms to 0.486 ms; 94 to 61 allocations/op.
+- Long Unicode text: 1.281 ms to 0.912 ms; 98 to 62 allocations/op.
+- Wide removals: 1.046 ms to 0.911 ms; 21,603 to 14,086 allocations/op.
+- Table: 0.438 ms to 0.378 ms; 8,605 to 6,138 allocations/op.
+
+Focused benchmarks used five 300 ms samples. An eight-child snapshot went from
+one allocation to zero; a 1,024-child snapshot went from nine allocations and
+29,760 bytes/op to one allocation and 9,472 bytes/op. Long-text normalization
+workloads went from 21–22 allocations to one. The mostly-newlines workload used
+one small allocation after sizing the short output, rather than reserving the
+entire 64 KiB input. Allocation budgets are checked separately from timing.
+These are local synthetic measurements rather than a promise for every input.

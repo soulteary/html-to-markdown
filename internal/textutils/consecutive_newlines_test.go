@@ -84,56 +84,24 @@ func TestTrimConsecutiveNewlines(t *testing.T) {
 }
 
 func TestTrimConsecutiveNewlines_Allocs(t *testing.T) {
-	const N = 1000
-
-	t.Run("no newlines", func(t *testing.T) {
-		var expectedAverage float64 = 1
-
-		actualAverage := testing.AllocsPerRun(N, func() {
-			input := []byte("abc")
-			output := TrimConsecutiveNewlines(input)
-			_ = output
+	for _, tc := range []struct {
+		name  string
+		input []byte
+		want  float64
+	}{
+		{"empty", nil, 0},
+		{"no newlines", []byte("abc"), 1},
+		{"exactly two newlines", []byte("abc\n\nabc"), 1},
+		{"three newlines", []byte("abc\n\n\nabc"), 1},
+		{"many newlines", bytes.Repeat([]byte("abc\n\n\n\n\n\nabc"), 1000), 1},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			actual := testing.AllocsPerRun(100, func() { bufferBenchmarkResult = TrimConsecutiveNewlines(tc.input) })
+			if actual != tc.want {
+				t.Fatalf("allocations: got %v; want %v", actual, tc.want)
+			}
 		})
-		if actualAverage != expectedAverage {
-			t.Errorf("expected %f allocations but got %f", expectedAverage, actualAverage)
-		}
-	})
-	t.Run("exactly two newlines", func(t *testing.T) {
-		var expectedAverage float64 = 1
-
-		actualAverage := testing.AllocsPerRun(N, func() {
-			input := []byte("abc\n\nabc")
-			output := TrimConsecutiveNewlines(input)
-			_ = output
-		})
-		if actualAverage != expectedAverage {
-			t.Errorf("expected %f allocations but got %f", expectedAverage, actualAverage)
-		}
-	})
-	t.Run("three newlines", func(t *testing.T) {
-		var expectedAverage float64 = 1
-
-		actualAverage := testing.AllocsPerRun(N, func() {
-			input := []byte("abc\n\n\nabc")
-			output := TrimConsecutiveNewlines(input)
-			_ = output
-		})
-		if actualAverage != expectedAverage {
-			t.Errorf("expected %f allocations but got %f", expectedAverage, actualAverage)
-		}
-	})
-	t.Run("many newlines", func(t *testing.T) {
-		var expectedAverage float64 = 16
-
-		actualAverage := testing.AllocsPerRun(N, func() {
-			input := bytes.Repeat([]byte("abc\n\n\n\n\n\nabc"), 1000)
-			output := TrimConsecutiveNewlines(input)
-			_ = output
-		})
-		if actualAverage != expectedAverage {
-			t.Errorf("expected %f allocations but got %f", expectedAverage, actualAverage)
-		}
-	})
+	}
 }
 
 func BenchmarkTrimConsecutiveNewlines(b *testing.B) {

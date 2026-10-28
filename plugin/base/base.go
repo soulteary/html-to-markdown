@@ -64,11 +64,13 @@ func (b *base) preRenderRemove(ctx converter.Context, doc *html.Node) {
 			return
 		}
 
-		for child := node.FirstChild; child != nil; child = child.NextSibling {
-			// Because we are sometimes removing a node, this causes problems
-			// with the for loop. Using `defer` is a cool trick!
-			// https://gist.github.com/loopthrough/17da0f416054401fec355d338727c46e
-			defer finder(child)
+		// Match the original deferred walk's right-to-left order without
+		// allocating a deferred call for every child. Save the neighbor before
+		// recursion, since the current child may be detached.
+		for child := node.LastChild; child != nil; {
+			previous := child.PrevSibling
+			finder(child)
+			child = previous
 		}
 	}
 	finder(doc)
