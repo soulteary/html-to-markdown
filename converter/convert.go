@@ -8,7 +8,6 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/soulteary/html-to-markdown/v2/marker"
 	"golang.org/x/net/html"
 )
 
@@ -101,10 +100,7 @@ func (conv *Converter) ConvertNode(doc *html.Node, opts ...ConvertOptionFunc) ([
 		// restoration over the final Markdown would also modify ordinary text
 		// assembled from separate inline nodes.
 		rawURL = string(restoreMarkers([]byte(rawURL)))
-		rawURL = strings.NewReplacer(
-			string(marker.MarkerEscaping), "%07",
-			string(marker.MarkerCodeBlockNewline), "%EF%80%82",
-		).Replace(rawURL)
+		rawURL = urlMarkerReplacer.Replace(rawURL)
 		return defaultAssembleAbsoluteURL(tagName, rawURL, domain)
 	})
 	customCtx := newConverterContext(ctx, conv)
