@@ -25,10 +25,20 @@ func hasTextChildNodes(startNode *html.Node) bool {
 	return found
 }
 
+// IsInsidePre reports whether a node belongs to a preformatted block.
+func IsInsidePre(node *html.Node) bool {
+	for parent := node.Parent; parent != nil; parent = parent.Parent {
+		if dom.NodeName(parent) == "pre" {
+			return true
+		}
+	}
+	return false
+}
+
 func RemoveEmptyCode(ctx context.Context, doc *html.Node) {
 	node := doc
 	for node != nil {
-		if dom.NodeName(node) == "code" && !hasTextChildNodes(node) {
+		if dom.NodeName(node) == "code" && !IsInsidePre(node) && !hasTextChildNodes(node) {
 			next := dom.GetNextNeighborNodeExcludingOwnChild(node)
 
 			dom.RemoveNode(node)

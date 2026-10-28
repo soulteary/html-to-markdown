@@ -91,6 +91,11 @@ func (c *commonmark) renderBlockCode(_ converter.Context, w converter.Writer, n 
 }
 
 func getCodeLanguage(n *html.Node) string {
+	for _, attr := range []string{"data-lang", "data-language"} {
+		if language := strings.TrimSpace(dom.GetAttributeOr(n, attr, "")); language != "" {
+			return language
+		}
+	}
 	class := dom.GetAttributeOr(n, "class", "")
 
 	parts := strings.Split(class, " ")
@@ -138,8 +143,21 @@ func getCodeWithoutTags(startNode *html.Node) ([]byte, string) {
 			return
 		}
 
-		for c := n.FirstChild; c != nil; c = c.NextSibling {
-			f(c)
+		var previousCode bool
+		var previousEmpty bool
+		for child := n.FirstChild; child != nil; child = child.NextSibling {
+			isCodeLine := n.Data == "pre" && child.Type == html.ElementNode && child.Data == "code"
+			if isCodeLine && previousCode && (previousEmpty || !bytes.HasSuffix(buf.Bytes(), []byte("\n"))) {
+				buf.WriteByte('\n')
+			}
+			before := buf.Len()
+			f(child)
+			if isCodeLine {
+				previousEmpty = before == buf.Len()
+				previousCode = true
+			} else if child.Type != html.TextNode || strings.TrimSpace(child.Data) != "" {
+				previousCode = false
+			}
 		}
 	}
 
