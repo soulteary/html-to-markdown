@@ -7,8 +7,6 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
-
-	"github.com/sebdah/goldie/v2"
 )
 
 var enableRoundTrip = flag.Bool("round", false, "enable the round trip testing")
@@ -66,16 +64,7 @@ func GoldenFiles(t *testing.T, convert ConvertFunc, roundTripConvert ConvertFunc
 				t.Fatal(err)
 			}
 
-			g := goldie.New(t,
-				goldie.WithFixtureDir(pathOfFolder),
-				goldie.WithNameSuffix(suffixOutputFile),
-				// Simple, ColoredDiff, ClassicDiff
-				// goldie.WithDiffEngine(goldie.Simple),
-				goldie.WithDiffFn(func(actual, expected string) string {
-					return fmt.Sprintf("Expected: %q\nGot: %q", expected, actual)
-				}),
-			)
-			g.Assert(t, run, []byte(output))
+			AssertGolden(t, filepath.Join(pathOfFolder, run+suffixOutputFile), output)
 
 			// - - - - - - - Round Trip Test - - - - - - - //
 			if *enableRoundTrip {

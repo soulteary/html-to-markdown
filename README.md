@@ -398,9 +398,14 @@ _Note: The outside API should not change because of backwards compatibility..._
 
 You don't have to be afraid of breaking the converter, since there are many "Golden File" tests:
 
-Add your problematic HTML snippet to one of the `.in.html` files in the `testdata` folders. Then run `go test -update` and have a look at which `.out.md` files changed in GIT.
+Add your problematic HTML snippet to one of the `.in.html` files in the `testdata` folders. Then run `go test ./plugin/commonmark ./plugin/strikethrough ./plugin/table -update` and inspect which `.out.md` files changed in Git.
 
-You can now change the internal logic and inspect what impact your change has by running `go test -update` again.
+You can now change the internal logic and inspect what impact your change has by running the same command again.
+
+Golden tests compare exact bytes using the standard library. Normal test runs never
+create or overwrite fixtures; missing files and mismatches fail with the fixture path.
+Use `go test ./cli/html2markdown/cmd -update` to update CLI `.golden` fixtures.
+Always review fixture changes before committing them.
 
 _Note: Before submitting your change as a PR, make sure that you run those tests and check the files into GIT..._
 

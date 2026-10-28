@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/sebdah/goldie/v2"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/tester"
 )
 
 func init() {
@@ -77,9 +77,8 @@ func cliGoldenTester(t *testing.T, folderpath string, input CLIGoldenInput) {
 		t.Fatal("neither stdout nor stderr have any content")
 	}
 
-	g := goldie.New(t, goldie.WithFixtureDir(filepath.Join(folderpath, "testdata")))
-	g.Assert(t, filepath.Join(t.Name(), "stdout"), stdout.Bytes())
-	g.Assert(t, filepath.Join(t.Name(), "stderr"), stderr.Bytes())
+	tester.AssertGolden(t, filepath.Join(folderpath, "testdata", t.Name(), "stdout.golden"), stdout.Bytes())
+	tester.AssertGolden(t, filepath.Join(folderpath, "testdata", t.Name(), "stderr.golden"), stderr.Bytes())
 }
 
 type CLITestCase struct {
