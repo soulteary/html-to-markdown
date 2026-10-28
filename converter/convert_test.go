@@ -3,8 +3,8 @@ package converter_test
 import (
 	"testing"
 
-	"github.com/JohannesKaufmann/dom"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/base"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/commonmark"
 	"golang.org/x/net/html"
@@ -14,8 +14,8 @@ func TestConvertString(t *testing.T) {
 	conv := converter.NewConverter()
 
 	preRenderer := func(ctx converter.Context, doc *html.Node) {
-		for _, node := range dom.AllNodes(doc) {
-			name := dom.NodeName(node)
+		for _, node := range domutils.AllNodes(doc) {
+			name := domutils.NodeName(node)
 
 			if name == "test" {
 				node.Attr[0].Val = "other_value"
@@ -23,13 +23,13 @@ func TestConvertString(t *testing.T) {
 		}
 	}
 	renderer := func(ctx converter.Context, w converter.Writer, n *html.Node) converter.RenderStatus {
-		name := dom.NodeName(n)
+		name := domutils.NodeName(n)
 
 		if name == "#text" {
 			w.WriteString(n.Data)
 			return converter.RenderSuccess
 		} else if name == "test" {
-			val := dom.GetAttributeOr(n, "key", "")
+			val := domutils.GetAttributeOr(n, "key", "")
 			w.WriteString(val)
 			return converter.RenderSuccess
 		}

@@ -3,7 +3,6 @@ package domutils
 import (
 	"context"
 
-	"github.com/JohannesKaufmann/dom"
 	"golang.org/x/net/html"
 )
 
@@ -16,12 +15,12 @@ func AddListEndComments(ctx context.Context, doc *html.Node) {
 			insertComment(node)
 		}
 
-		node = dom.GetNextNeighborElement(node)
+		node = GetNextNeighborElement(node)
 	}
 }
 
 func nameIsList(node *html.Node) bool {
-	name := dom.NodeName(node)
+	name := NodeName(node)
 	return name == "ul" || name == "ol"
 }
 
@@ -34,10 +33,10 @@ func insertComment(listNode *html.Node) {
 }
 
 func nextNameIsList(startNode *html.Node) bool {
-	node := dom.GetNextNeighborNodeExcludingOwnChild(startNode)
+	node := GetNextNeighborNodeExcludingOwnChild(startNode)
 
 	for node != nil {
-		name := dom.NodeName(node)
+		name := NodeName(node)
 		if name == "ul" || name == "ol" {
 			return true
 		}
@@ -67,7 +66,7 @@ func nextNameIsList(startNode *html.Node) bool {
 		// TODO: look in the KeepRemoveMap?
 		// e.g. ul then script then ul
 
-		node = dom.GetNextNeighborNode(node)
+		node = GetNextNeighborNode(node)
 		continue
 	}
 	return false

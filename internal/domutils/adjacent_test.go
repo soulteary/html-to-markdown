@@ -1,9 +1,9 @@
-package domutils
+package domutils_test
 
 import (
 	"testing"
 
-	"github.com/JohannesKaufmann/dom"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/tester"
 	"golang.org/x/net/html"
 )
@@ -259,8 +259,8 @@ func TestMergeAdjacent(t *testing.T) {
 		t.Run(run.desc, func(t *testing.T) {
 			doc := tester.Parse(t, run.input, "")
 
-			MergeAdjacent(doc, func(n *html.Node) bool {
-				name := dom.NodeName(n)
+			domutils.MergeAdjacent(doc, func(n *html.Node) bool {
+				name := domutils.NodeName(n)
 				return name == "strong" || name == "em"
 			})
 
@@ -290,7 +290,7 @@ func TestMergeAdjacentTextNodes(t *testing.T) {
 	div.AppendChild(textTwo)
 	div.AppendChild(textThree)
 
-	MergeAdjacentTextNodes(div)
+	domutils.MergeAdjacentTextNodes(div)
 
 	expected := `
 div

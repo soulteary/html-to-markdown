@@ -1,18 +1,17 @@
 package commonmark
 
 import (
-	"github.com/JohannesKaufmann/dom"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"golang.org/x/net/html"
 )
 
 func nameIsBold(node *html.Node) bool {
-	name := dom.NodeName(node)
+	name := domutils.NodeName(node)
 	return name == "strong" || name == "b"
 }
 func nameIsItalic(node *html.Node) bool {
-	name := dom.NodeName(node)
+	name := domutils.NodeName(node)
 	return name == "em" || name == "i"
 }
 
@@ -31,27 +30,27 @@ func nameIsBothBoldOrItalic(a, b *html.Node) bool {
 }
 
 func nameIsPre(node *html.Node) bool {
-	name := dom.NodeName(node)
+	name := domutils.NodeName(node)
 	return name == "pre"
 }
 func nameIsInlineCode(node *html.Node) bool {
 	if domutils.IsInsidePre(node) {
 		return false
 	}
-	name := dom.NodeName(node)
+	name := domutils.NodeName(node)
 	return name == "code" || name == "var" || name == "samp" || name == "kbd" || name == "tt"
 }
 
 func nameIsLink(node *html.Node) bool {
-	return dom.NodeName(node) == "a"
+	return domutils.NodeName(node) == "a"
 }
 
 func nameIsBothLink(a, b *html.Node) bool {
-	return dom.NodeName(a) == "a" && dom.NodeName(b) == "a"
+	return domutils.NodeName(a) == "a" && domutils.NodeName(b) == "a"
 }
 
 func nameIsHeading(node *html.Node) bool {
-	name := dom.NodeName(node)
+	name := domutils.NodeName(node)
 
 	if name == "h1" || name == "h2" || name == "h3" || name == "h4" || name == "h5" || name == "h6" {
 		return true
@@ -60,7 +59,7 @@ func nameIsHeading(node *html.Node) bool {
 }
 
 // func nameIsBlockquote(node *html.Node) bool {
-// 	return dom.NodeName(node) == "blockquote"
+// 	return domutils.NodeName(node) == "blockquote"
 // }
 
 func (c *commonmark) handlePreRender(ctx converter.Context, doc *html.Node) {

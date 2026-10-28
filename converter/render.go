@@ -1,7 +1,7 @@
 package converter
 
 import (
-	"github.com/JohannesKaufmann/dom"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"golang.org/x/net/html"
 )
 
@@ -12,7 +12,7 @@ func (conv *Converter) handleRenderNodes(ctx Context, w Writer, nodes ...*html.N
 }
 
 func (conv *Converter) handleRenderNode(ctx Context, w Writer, node *html.Node) RenderStatus {
-	name := dom.NodeName(node)
+	name := domutils.NodeName(node)
 
 	// - - A: the #text node - - //
 	if name == "#text" {
@@ -34,7 +34,7 @@ func (conv *Converter) handleRenderNode(ctx Context, w Writer, node *html.Node) 
 
 func (conv *Converter) handleRenderFallback(ctx Context, w Writer, node *html.Node) RenderStatus {
 
-	tagName := dom.NodeName(node)
+	tagName := domutils.NodeName(node)
 	tagType, _ := ctx.GetTagType(tagName)
 
 	if tagType == TagTypeBlock {

@@ -1,10 +1,10 @@
-package domutils
+package domutils_test
 
 import (
 	"context"
 	"testing"
 
-	"github.com/JohannesKaufmann/dom"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/tester"
 	"golang.org/x/net/html"
 )
@@ -42,8 +42,8 @@ func TestAddSpace(t *testing.T) {
 		t.Run(run.desc, func(t *testing.T) {
 			doc := tester.Parse(t, run.input, "")
 
-			AddSpace(context.Background(), doc, func(n *html.Node) bool {
-				name := dom.NodeName(n)
+			domutils.AddSpace(context.Background(), doc, func(n *html.Node) bool {
+				name := domutils.NodeName(n)
 				if name == "strong" || name == "b" {
 					return true
 				}
@@ -52,7 +52,7 @@ func TestAddSpace(t *testing.T) {
 				}
 				return false
 			}, func(n *html.Node) bool {
-				return dom.NodeName(n) == "code"
+				return domutils.NodeName(n) == "code"
 			})
 
 			tester.ExpectRepresentation(t, doc, "output", run.expected)

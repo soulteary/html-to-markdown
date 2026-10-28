@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"strings"
 
-	"github.com/JohannesKaufmann/dom"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/textutils"
 	"golang.org/x/net/html"
 )
@@ -31,7 +31,7 @@ func (c *commonmark) renderImage(ctx converter.Context, w converter.Writer, n *h
 	// Prefer the standard source; lazy-loading attributes are fallbacks only.
 	var src string
 	for _, attr := range []string{"src", "data-src", "data-original", "data-lazy-src"} {
-		src = strings.TrimSpace(dom.GetAttributeOr(n, attr, ""))
+		src = strings.TrimSpace(domutils.GetAttributeOr(n, attr, ""))
 		if src != "" {
 			break
 		}
@@ -42,10 +42,10 @@ func (c *commonmark) renderImage(ctx converter.Context, w converter.Writer, n *h
 
 	src = ctx.AssembleAbsoluteURL(ctx, "img", src)
 
-	title := dom.GetAttributeOr(n, "title", "")
+	title := domutils.GetAttributeOr(n, "title", "")
 	title = strings.ReplaceAll(title, "\n", " ")
 
-	alt := dom.GetAttributeOr(n, "alt", "")
+	alt := domutils.GetAttributeOr(n, "alt", "")
 	alt = strings.ReplaceAll(alt, "\n", " ")
 
 	// The alt description will be placed between two square brackets `[alt]`

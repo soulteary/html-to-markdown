@@ -5,7 +5,6 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/JohannesKaufmann/dom"
 	"golang.org/x/net/html"
 )
 
@@ -34,7 +33,7 @@ func SwapTags(ctx context.Context, doc *html.Node, isOuterNode, isInnerNode func
 	var finder func(*html.Node)
 	finder = func(node *html.Node) {
 		if isOuterNode(node) {
-			childs := dom.AllChildNodes(node)
+			childs := AllChildNodes(node)
 			childs = slices.DeleteFunc(childs, isEmptyText)
 
 			if len(childs) == 1 && isInnerNode(childs[0]) {

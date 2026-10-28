@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/JohannesKaufmann/dom"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"golang.org/x/net/html"
 )
 
@@ -194,7 +194,7 @@ func (s *tablePlugin) Init(conv *converter.Converter) error {
 }
 
 func (s *tablePlugin) handleRender(ctx converter.Context, w converter.Writer, n *html.Node) converter.RenderStatus {
-	name := dom.NodeName(n)
+	name := domutils.NodeName(n)
 	switch name {
 	case "table":
 		return s.renderTable(ctx, w, n)

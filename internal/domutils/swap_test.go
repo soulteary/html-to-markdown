@@ -1,144 +1,13 @@
-package domutils
+package domutils_test
 
 import (
 	"context"
 	"testing"
 
-	"github.com/JohannesKaufmann/dom"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/tester"
 	"golang.org/x/net/html"
-	"golang.org/x/net/html/atom"
 )
-
-func generateANodes() *html.Node {
-	div := &html.Node{
-		Namespace: "",
-		Type:      html.ElementNode,
-		DataAtom:  atom.Div,
-
-		Attr: []html.Attribute{},
-		Data: "div",
-	}
-	link := &html.Node{
-		Namespace: "",
-		Type:      html.ElementNode,
-		DataAtom:  atom.A,
-
-		Attr: []html.Attribute{
-			{
-				Namespace: "",
-				Key:       "KeyA",
-				Val:       "ValA",
-			},
-		},
-
-		Data: "a",
-	}
-	text := &html.Node{
-		Namespace: "",
-		Type:      html.TextNode,
-		DataAtom:  0,
-
-		Data: "ContentA",
-	}
-	link.AppendChild(text)
-	div.AppendChild(link)
-
-	return div
-}
-func generateBNodes() *html.Node {
-	div := &html.Node{
-		Namespace: "",
-		Type:      html.ElementNode,
-		DataAtom:  atom.Main,
-
-		Attr: []html.Attribute{},
-		Data: "main",
-	}
-	link := &html.Node{
-		Namespace: "",
-		Type:      html.ElementNode,
-		DataAtom:  atom.B,
-
-		Attr: []html.Attribute{
-			{
-				Namespace: "",
-				Key:       "KeyB",
-				Val:       "ValB",
-			},
-		},
-
-		Data: "b",
-	}
-	text := &html.Node{
-		Namespace: "",
-		Type:      html.TextNode,
-		DataAtom:  0,
-
-		Data: "ContentB",
-	}
-	link.AppendChild(text)
-	div.AppendChild(link)
-
-	return div
-}
-func TestSwapTagsOfNodes_Basics(t *testing.T) {
-	a := generateANodes()
-	b := generateBNodes()
-
-	swapTagsOfNodes(a.FirstChild, b.FirstChild)
-
-	// These fields should have changed:
-	if a.FirstChild.DataAtom != atom.B {
-		t.Error("expected different a atom")
-	}
-	if a.FirstChild.Data != "b" {
-		t.Error("expected different a data")
-	}
-	if len(a.FirstChild.Attr) != 1 {
-		t.Error("expected different a attributes length")
-	}
-	if a.FirstChild.Attr[0].Key != "KeyB" {
-		t.Error("expected different a attribute key")
-	}
-	if a.FirstChild.Attr[0].Val != "ValB" {
-		t.Error("expected different a attribute key")
-	}
-
-	// The pointers should NOT have changed:
-	if a.FirstChild.Parent.Data != "div" {
-		t.Error("expected the same parent for a")
-	}
-	if a.FirstChild.FirstChild.Data != "ContentA" {
-		t.Error("expected the same text for a")
-	}
-
-	// - - - //
-
-	if b.FirstChild.DataAtom != atom.A {
-		t.Error("expected different b atom")
-	}
-	if b.FirstChild.Data != "a" {
-		t.Error("expected different b data")
-	}
-	if len(b.FirstChild.Attr) != 1 {
-		t.Error("expected different b attributes length")
-	}
-	if b.FirstChild.Attr[0].Key != "KeyA" {
-		t.Error("expected different b attribute key")
-	}
-	if b.FirstChild.Attr[0].Val != "ValA" {
-		t.Error("expected different b attribute key")
-	}
-
-	// The pointers should NOT have changed:
-	if b.FirstChild.Parent.Data != "main" {
-		t.Error("expected the same parent for b")
-	}
-	if b.FirstChild.FirstChild.Data != "ContentB" {
-		t.Error("expected the same text for b")
-	}
-}
 
 func TestSwapTags_HeadingLink(t *testing.T) {
 	runs := []struct {
@@ -232,17 +101,17 @@ func TestSwapTags_HeadingLink(t *testing.T) {
 			doc := tester.Parse(t, run.input, run.startFrom)
 
 			isLink := func(n *html.Node) bool {
-				return dom.NodeName(n) == "a"
+				return domutils.NodeName(n) == "a"
 			}
 			isHeading := func(n *html.Node) bool {
-				name := dom.NodeName(n)
+				name := domutils.NodeName(n)
 
 				if name == "h1" || name == "h2" || name == "h3" || name == "h4" || name == "h5" || name == "h6" {
 					return true
 				}
 				return false
 			}
-			SwapTags(context.TODO(), doc, isLink, isHeading)
+			domutils.SwapTags(context.TODO(), doc, isLink, isHeading)
 
 			tester.ExpectRepresentation(t, doc, "output", run.expected)
 
@@ -439,12 +308,12 @@ func TestSwapTags_PreCode(t *testing.T) {
 			tester.ExpectRepresentation(t, doc, "before", run.expectedBefore)
 
 			isCode := func(n *html.Node) bool {
-				return dom.NodeName(n) == "code"
+				return domutils.NodeName(n) == "code"
 			}
 			isPre := func(n *html.Node) bool {
-				return dom.NodeName(n) == "pre"
+				return domutils.NodeName(n) == "pre"
 			}
-			SwapTags(context.TODO(), doc, isCode, isPre)
+			domutils.SwapTags(context.TODO(), doc, isCode, isPre)
 
 			tester.ExpectRepresentation(t, doc, "output", run.expectedAfter)
 		})
@@ -534,7 +403,7 @@ func TestSwapTags_StrongLinks(t *testing.T) {
 			doc := tester.Parse(t, run.input, "")
 
 			isBoldOrItalic := func(node *html.Node) bool {
-				name := dom.NodeName(node)
+				name := domutils.NodeName(node)
 				if name == "strong" || name == "b" {
 					return true
 				}
@@ -546,20 +415,20 @@ func TestSwapTags_StrongLinks(t *testing.T) {
 			}
 
 			isLink := func(node *html.Node) bool {
-				return dom.NodeName(node) == "a"
+				return domutils.NodeName(node) == "a"
 			}
 
 			// Remove all unnessesary span tags
-			// for _, node := range dom.GetAllNodes(doc) {
-			// 	name := dom.NodeName(node)
+			// for _, node := range domutils.GetAllNodes(doc) {
+			// 	name := domutils.NodeName(node)
 			// 	if name == "span" {
-			// 		dom.UnwrapNode(node)
+			// 		domutils.UnwrapNode(node)
 			// 	}
 			// }
 
 			// collapse.Collapse(doc)
 
-			SwapTags(context.TODO(), doc, isBoldOrItalic, isLink)
+			domutils.SwapTags(context.TODO(), doc, isBoldOrItalic, isLink)
 
 			tester.ExpectRepresentation(t, doc, "output", run.expectedAfter)
 		})

@@ -3,14 +3,14 @@ package commonmark
 import (
 	"bytes"
 
-	"github.com/JohannesKaufmann/dom"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/textutils"
 	"golang.org/x/net/html"
 )
 
 func (c commonmark) getDelimiter(n *html.Node) []byte {
-	name := dom.NodeName(n)
+	name := domutils.NodeName(n)
 	if name == "strong" || name == "b" {
 		return []byte(c.StrongDelimiter)
 	} else if name == "em" || name == "i" {

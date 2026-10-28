@@ -6,15 +6,15 @@ import (
 	"strconv"
 	"unicode/utf8"
 
-	"github.com/JohannesKaufmann/dom"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/textutils"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/marker"
 	"golang.org/x/net/html"
 )
 
 func getStartAt(node *html.Node) int {
-	startVal := dom.GetAttributeOr(node, "start", "1")
+	startVal := domutils.GetAttributeOr(node, "start", "1")
 	startAt, err := strconv.Atoi(startVal)
 	if err != nil {
 		startAt = 1
@@ -66,7 +66,7 @@ func renderMultiLineListItem(w converter.Writer, content []byte, indentCount int
 }
 
 func (c commonmark) renderListContainer(ctx converter.Context, w converter.Writer, n *html.Node) converter.RenderStatus {
-	children := dom.AllChildNodes(n)
+	children := domutils.AllChildNodes(n)
 	items := make([][]byte, 0, len(children))
 
 	for _, child := range children {

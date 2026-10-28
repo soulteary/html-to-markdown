@@ -1,17 +1,17 @@
 package table
 
 import (
-	"github.com/JohannesKaufmann/dom"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"golang.org/x/net/html"
 )
 
 func selectHeaderRowNode(node *html.Node) *html.Node {
-	thead := dom.FindFirstNode(node, func(n *html.Node) bool {
-		return dom.NodeName(n) == "thead"
+	thead := domutils.FindFirstNode(node, func(n *html.Node) bool {
+		return domutils.NodeName(n) == "thead"
 	})
 	if thead != nil {
-		firstTr := dom.FindFirstNode(thead, func(n *html.Node) bool {
-			return dom.NodeName(n) == "tr"
+		firstTr := domutils.FindFirstNode(thead, func(n *html.Node) bool {
+			return domutils.NodeName(n) == "tr"
 		})
 		if firstTr != nil {
 			// YEAH we found the "tr" inside the "thead"
@@ -19,8 +19,8 @@ func selectHeaderRowNode(node *html.Node) *html.Node {
 		}
 	}
 
-	firstTh := dom.FindFirstNode(node, func(n *html.Node) bool {
-		return dom.NodeName(n) == "th"
+	firstTh := domutils.FindFirstNode(node, func(n *html.Node) bool {
+		return domutils.NodeName(n) == "th"
 	})
 	if firstTh != nil {
 		// YEAH we found the "th"
@@ -34,7 +34,7 @@ func selectNormalRowNodes(tableNode *html.Node, selectedHeaderRowNode *html.Node
 
 	var finder func(node *html.Node)
 	finder = func(node *html.Node) {
-		name := dom.NodeName(node)
+		name := domutils.NodeName(node)
 		if name == "tr" && node != selectedHeaderRowNode {
 			// We want to make sure to not select the header row a *second* time.
 			collected = append(collected, node)

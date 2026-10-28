@@ -5,8 +5,8 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/JohannesKaufmann/dom"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/textutils"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/marker"
 	"golang.org/x/net/html"
@@ -92,11 +92,11 @@ func (c *commonmark) renderBlockCode(_ converter.Context, w converter.Writer, n 
 
 func getCodeLanguage(n *html.Node) string {
 	for _, attr := range []string{"data-lang", "data-language"} {
-		if language := strings.TrimSpace(dom.GetAttributeOr(n, attr, "")); language != "" {
+		if language := strings.TrimSpace(domutils.GetAttributeOr(n, attr, "")); language != "" {
 			return language
 		}
 	}
-	class := dom.GetAttributeOr(n, "class", "")
+	class := domutils.GetAttributeOr(n, "class", "")
 
 	parts := strings.Split(class, " ")
 	for _, part := range parts {

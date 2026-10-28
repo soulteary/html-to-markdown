@@ -4,13 +4,10 @@ import (
 	"bytes"
 	"strings"
 
-	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
-
-	"github.com/JohannesKaufmann/dom"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/collapse"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/textutils"
-
 	"golang.org/x/net/html"
 )
 
@@ -60,10 +57,10 @@ func (b *base) Init(conv *converter.Converter) error {
 func (b *base) preRenderRemove(ctx converter.Context, doc *html.Node) {
 	var finder func(node *html.Node)
 	finder = func(node *html.Node) {
-		name := dom.NodeName(node)
+		name := domutils.NodeName(node)
 
 		if tagType, _ := ctx.GetTagType(name); tagType == converter.TagTypeRemove {
-			dom.RemoveNode(node)
+			domutils.RemoveNode(node)
 			return
 		}
 
@@ -87,13 +84,13 @@ func (b *base) preRenderRemove(ctx converter.Context, doc *html.Node) {
 func (b *base) preRenderCollapse(ctx converter.Context, doc *html.Node) {
 	collapse.Collapse(doc, &collapse.DomFuncs{
 		IsBlockNode: func(node *html.Node) bool {
-			tagName := dom.NodeName(node)
+			tagName := domutils.NodeName(node)
 			tagType, ok := ctx.GetTagType(tagName)
 			if ok {
 				return tagType == converter.TagTypeBlock
 			}
 
-			return dom.NameIsBlockNode(tagName)
+			return domutils.NameIsBlockNode(tagName)
 		},
 	})
 }

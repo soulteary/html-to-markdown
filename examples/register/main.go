@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/JohannesKaufmann/dom"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/base"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/commonmark"
@@ -43,9 +42,14 @@ func main() {
 }
 
 func renderStarRating(ctx converter.Context, w converter.Writer, node *html.Node) converter.RenderStatus {
-	// The "github.com/JohannesKaufmann/dom" package provides helper functions
-	// to interact with the html node, like getting the attribute "count".
-	rawCount := dom.GetAttributeOr(node, "count", "0")
+	// Read attributes directly so this example can be copied into external plugins.
+	rawCount := "0"
+	for _, attr := range node.Attr {
+		if attr.Key == "count" {
+			rawCount = attr.Val
+			break
+		}
+	}
 	count, _ := strconv.Atoi(rawCount)
 
 	rating := strings.Repeat("⭐️", count)

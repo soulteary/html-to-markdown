@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/JohannesKaufmann/dom"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"golang.org/x/net/html"
 )
 
@@ -33,7 +33,7 @@ func Parse(t *testing.T, rawHTML string, startFrom string) *html.Node {
 		if foundNode != nil {
 			return
 		}
-		if dom.NodeName(node) == startFrom {
+		if domutils.NodeName(node) == startFrom {
 			foundNode = node
 			return
 		}

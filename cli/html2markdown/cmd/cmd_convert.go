@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/JohannesKaufmann/dom"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/base"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/commonmark"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/strikethrough"
@@ -41,7 +41,7 @@ func (cli *CLI) includeNodesFromDoc(doc *html.Node) (*html.Node, error) {
 
 	root := &html.Node{}
 	for _, n := range nodes {
-		dom.RemoveNode(n)
+		domutils.RemoveNode(n)
 		root.AppendChild(n)
 	}
 
@@ -55,7 +55,7 @@ func (cli *CLI) excludeNodesFromDoc(doc *html.Node) error {
 	var finder func(node *html.Node)
 	finder = func(node *html.Node) {
 		if cli.config.excludeSelector.Match(node) {
-			dom.RemoveNode(node)
+			domutils.RemoveNode(node)
 			return
 		}
 

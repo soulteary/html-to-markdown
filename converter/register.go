@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/JohannesKaufmann/dom"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"golang.org/x/net/html"
 )
 
@@ -81,7 +81,7 @@ func (r *register) RendererFor(tagName string, tagType tagType, renderFn HandleR
 
 	// 2. we register the render function
 	r.Renderer(func(ctx Context, w Writer, n *html.Node) RenderStatus {
-		if dom.NodeName(n) == tagName {
+		if domutils.NodeName(n) == tagName {
 			return renderFn(ctx, w, n)
 		}
 		return RenderTryNext
@@ -207,9 +207,9 @@ func (conv *Converter) getTagType(tagName string) (tagType, bool) {
 	types, ok := conv.tagTypes[tagName]
 	if !ok || len(types) == 0 {
 
-		if dom.NameIsBlockNode(tagName) {
+		if domutils.NameIsBlockNode(tagName) {
 			return TagTypeBlock, true
-		} else if dom.NameIsInlineNode(tagName) {
+		} else if domutils.NameIsInlineNode(tagName) {
 			return TagTypeInline, true
 		}
 		return "", false

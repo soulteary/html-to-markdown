@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/JohannesKaufmann/dom"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/domutils"
 	"golang.org/x/net/html"
 )
 
@@ -169,7 +169,7 @@ func (c *converterContext) RenderNodes(ctx Context, w Writer, nodes ...*html.Nod
 	c.conv.handleRenderNodes(ctx, w, nodes...)
 }
 func (c *converterContext) RenderChildNodes(ctx Context, w Writer, n *html.Node) {
-	c.conv.handleRenderNodes(ctx, w, dom.AllChildNodes(n)...)
+	c.conv.handleRenderNodes(ctx, w, domutils.AllChildNodes(n)...)
 }
 
 func (c *converterContext) GetTagType(tagName string) (tagType, bool) {

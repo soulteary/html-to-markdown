@@ -1,14 +1,13 @@
 package domutils
 
 import (
-	"github.com/JohannesKaufmann/dom"
 	"golang.org/x/net/html"
 )
 
 func RemoveRedundant(doc *html.Node, matchFn func(*html.Node, *html.Node) bool) {
-	for _, node := range dom.AllNodes(doc) {
+	for _, node := range AllNodes(doc) {
 		if hasSameTypeAncestor(node, matchFn) {
-			dom.UnwrapNode(node)
+			UnwrapNode(node)
 		}
 	}
 
