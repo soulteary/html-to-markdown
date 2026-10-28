@@ -70,5 +70,4 @@ minimal Go code, HTML input, actual Markdown, and expected Markdown. See
 
 Use a new `v2.x.y` tag for a library release after the validation commands pass.
 The tagged commit must declare the `github.com/soulteary/html-to-markdown/v2`
-module path. Historical tags inherited from upstream can still declare its old
-module path, so the README installs `@main` during this transition.
+module path. Published tags must not be moved or reused.

@@ -15,10 +15,10 @@ Go 1.27.3 or newer is required. The only direct external dependency is
 
 ## Install
 
-Install the current maintained branch:
+Install the latest stable release:
 
 ```sh
-go get github.com/soulteary/html-to-markdown/v2@main
+go get github.com/soulteary/html-to-markdown/v2
 ```
 
 When migrating from upstream, change the `github.com/JohannesKaufmann/html-to-markdown/v2`
