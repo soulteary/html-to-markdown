@@ -8,6 +8,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/JohannesKaufmann/html-to-markdown/v2/marker"
 	"golang.org/x/net/html"
 )
 
@@ -91,15 +92,22 @@ func (conv *Converter) ConvertNode(doc *html.Node, opts ...ConvertOptionFunc) ([
 	}
 	ctx := option.context
 	ctx = provideDomain(ctx, option.domain)
-	ctx = provideAssembleAbsoluteURL(ctx, defaultAssembleAbsoluteURL)
 	ctx = state.provideGlobalState(ctx)
-
-	customCtx := newConverterContext(ctx, conv)
-
-	// - - - - - - - - - - - - - - - - - - - //
 
 	restoreMarkers, cleanupMarkers := protectInputMarkers(doc, option.domain)
 	defer cleanupMarkers()
+	ctx = provideAssembleAbsoluteURL(ctx, func(tagName, rawURL, domain string) string {
+		// Restore protected attributes before URL encoding. Encoded token
+		// restoration over the final Markdown would also modify ordinary text
+		// assembled from separate inline nodes.
+		rawURL = string(restoreMarkers([]byte(rawURL)))
+		rawURL = strings.NewReplacer(
+			string(marker.MarkerEscaping), "%07",
+			string(marker.MarkerCodeBlockNewline), "%EF%80%82",
+		).Replace(rawURL)
+		return defaultAssembleAbsoluteURL(tagName, rawURL, domain)
+	})
+	customCtx := newConverterContext(ctx, conv)
 
 	// Pre-Render
 	for _, handler := range conv.getPreRenderHandlers() {

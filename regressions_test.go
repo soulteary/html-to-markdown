@@ -25,6 +25,7 @@ func TestUpstreamConversionRegressions(t *testing.T) {
 		{"223 inline markers", "<code>a\a\uf002b</code>", "`a\a\uf002b`"},
 		{"223 existing token candidates", "<p>\ue000\ue001\ue000\ue000\ue002\a\uf002</p>", "\ue000\ue001\ue000\ue000\ue002\a\uf002"},
 		{"223 image attributes", "<img src='a\uf002.png' alt='x\ay'>", "![x\ay](a%EF%80%82.png)"},
+		{"223 bell in image URL", "<img src='a&#7;.png'>", "![](a%07.png)"},
 		{"223 encoded token candidates", "<p>%ee%80%80%ee%80%82\a\uf002</p>", "%ee%80%80%ee%80%82\a\uf002"},
 		{"223 adjacent input token fragments", "<span>\ue000</span><span>\ue000</span><span>\ue001</span><span>\a</span>", "\ue000\ue000\ue001\a"},
 		{"223 encoded URL query", "<a href='/a?q=\uf002'>link</a>", "[link](/a?q=%EF%80%82)"},
@@ -206,5 +207,20 @@ func TestMarkerTokensAvoidInternalMarkers(t *testing.T) {
 	}
 	if got != want {
 		t.Fatalf("literal marker corrupted after %d private-use runes", 0xf002-0xe000)
+	}
+}
+
+func TestEncodedMarkerTextAcrossInlineNodes(t *testing.T) {
+	for _, input := range []string{
+		`<p>&#7;</p><span>%EE</span><span>%80%80</span>`,
+		`<p>&#7;</p><span>%EE</span><script>ignored</script><span>%80%80</span>`,
+	} {
+		got, err := htmltomarkdown.ConvertString(input)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if got != "\a\n\n%EE%80%80" {
+			t.Fatalf("got %q", got)
+		}
 	}
 }

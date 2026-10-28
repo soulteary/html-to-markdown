@@ -87,13 +87,6 @@ func protectInputMarkers(doc *html.Node, domain string) (func([]byte) []byte, fu
 	bellToken, newlineToken := nextToken(), nextToken()
 	protect := strings.NewReplacer(bell, bellToken, newline, newlineToken)
 	restore := strings.NewReplacer(bellToken, bell, newlineToken, newline)
-	// URL assembly percent-encodes private-use characters. Restore those to
-	// the encoded original characters, never to a raw control byte in a URL.
-	restoreOutput := strings.NewReplacer(
-		bellToken, bell, newlineToken, newline,
-		url.QueryEscape(bellToken), url.QueryEscape(bell),
-		url.QueryEscape(newlineToken), url.QueryEscape(newline),
-	)
 	for _, n := range nodes {
 		if n.Type == html.TextNode {
 			n.Data = protect.Replace(n.Data)
@@ -131,6 +124,6 @@ func protectInputMarkers(doc *html.Node, domain string) (func([]byte) []byte, fu
 		if result == nil {
 			return nil
 		}
-		return []byte(restoreOutput.Replace(string(result)))
+		return []byte(restore.Replace(string(result)))
 	}, cleanup
 }
