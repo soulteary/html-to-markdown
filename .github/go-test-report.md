@@ -4,11 +4,11 @@
 
 | Metric | Value |
 | --- | --- |
-| Total | 133 |
-| Passed | 133 |
+| Total | 136 |
+| Passed | 136 |
 | Failed | 0 |
 | Skipped | 0 |
-| Coverage | 86.51% |
+| Coverage | 86.49% |
 | Threshold | 0.00% |
 
 ### Packages
@@ -17,7 +17,7 @@
 | --- | --- | --- | --- | --- |
 | . | pass | 17 | 0 | 100.00% |
 | collapse | pass | 10 | 0 | 100.00% |
-| converter | pass | 12 | 0 | 76.05% |
+| converter | pass | 15 | 0 | 75.80% |
 | examples/basics | pass | 1 | 0 | 20.00% |
 | examples/options | pass | 1 | 0 | 33.33% |
 | examples/plugins | pass | 1 | 0 | 33.33% |

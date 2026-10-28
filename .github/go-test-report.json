@@ -1,15 +1,15 @@
 {
   "schema_version": "1.0",
   "tests": {
-    "total": 133,
-    "passed": 133,
+    "total": 136,
+    "passed": 136,
     "failed": 0,
     "skipped": 0
   },
   "coverage": {
-    "covered_statements": 1892,
-    "total_statements": 2187,
-    "percentage": 86.51,
+    "covered_statements": 1888,
+    "total_statements": 2183,
+    "percentage": 86.49,
     "threshold": 0
   },
   "packages": [
@@ -30,9 +30,9 @@
     {
       "name": "converter",
       "status": "pass",
-      "tests": 12,
+      "tests": 15,
       "failed": 0,
-      "coverage": 76.05
+      "coverage": 75.8
     },
     {
       "name": "examples/basics",
