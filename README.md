@@ -150,6 +150,14 @@ calling the root convenience functions for every document. See
 [Performance](PERFORMANCE.md) for converter reuse, benchmark workloads, and
 repeatable measurement commands.
 
+The [v2.0.1 comparison with upstream v2.5.2](PERFORMANCE.md#v201-compared-with-upstream-v252)
+includes time, allocated bytes, and allocation counts for nine workloads in
+Fresh and Reuse modes. With Go 1.27.3 and `GOMAXPROCS=1`, dense Markdown
+punctuation in Reuse mode took about 69% less time (about 3.25× throughput) and
+allocated 77% fewer bytes. Deep-tree timing was essentially unchanged. These
+are local synthetic results; the comparison documents settings, variability,
+raw samples, and reproduction steps.
+
 ## Quality reports
 
 CI uses [go-test-report-action](https://github.com/soulteary/go-test-report-action)
