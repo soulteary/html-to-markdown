@@ -178,3 +178,33 @@ func TestConcurrentLiteralMarkers(t *testing.T) {
 	}
 	workers.Wait()
 }
+
+func TestMarkerTokensExcludeBaseURL(t *testing.T) {
+	for _, domain := range []string{"https://example.com/%EE%80%80/", "https://example.com/\ue000/", "https://example.com/%EE%80%81/"} {
+		got, err := htmltomarkdown.ConvertString("<p>&#7;&#61442;</p><a href='page'>link</a><img data-original='image.png'>", converter.WithDomain(domain))
+		if err != nil {
+			t.Fatal(err)
+		}
+		encoded := strings.ReplaceAll(domain, "\ue000", "%EE%80%80")
+		want := "\a\uf002\n\n[link](" + encoded + "page)![](" + encoded + "image.png)"
+		if got != want {
+			t.Errorf("base %q: got %q; want %q", domain, got, want)
+		}
+	}
+}
+
+func TestMarkerTokensAvoidInternalMarkers(t *testing.T) {
+	var text strings.Builder
+	for r := rune(0xe000); r < 0xf002; r++ {
+		text.WriteRune(r)
+	}
+	text.WriteRune('\a')
+	want := text.String()
+	got, err := htmltomarkdown.ConvertString("<p>" + want + "</p>")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got != want {
+		t.Fatalf("literal marker corrupted after %d private-use runes", 0xf002-0xe000)
+	}
+}

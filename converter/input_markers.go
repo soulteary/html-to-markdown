@@ -15,7 +15,7 @@ var encodedBytes = regexp.MustCompile(`(?:%[0-9a-fA-F]{2})+`)
 // protectInputMarkers separates literal input from internal render markers.
 // Tokens are chosen per document, so input containing private-use characters
 // cannot collide with them. Restoration runs only after every post-renderer.
-func protectInputMarkers(doc *html.Node) (func([]byte) []byte, func()) {
+func protectInputMarkers(doc *html.Node, domain string) (func([]byte) []byte, func()) {
 	var nodes []*html.Node
 	bell := string(marker.MarkerEscaping)
 	newline := string(marker.MarkerCodeBlockNewline)
@@ -40,6 +40,9 @@ func protectInputMarkers(doc *html.Node) (func([]byte) []byte, func()) {
 	}
 
 	var content strings.Builder
+	// Relative URLs may introduce characters from the base during rendering.
+	// They must be excluded just like characters already present in the DOM.
+	content.WriteString(domain)
 	for _, n := range nodes {
 		content.WriteString(n.Data)
 		for _, a := range n.Attr {
@@ -53,7 +56,10 @@ func protectInputMarkers(doc *html.Node) (func([]byte) []byte, func()) {
 		text, _ := url.PathUnescape(value)
 		return text
 	})
-	used := make(map[rune]bool)
+	used := map[rune]bool{
+		marker.MarkerEscaping:         true,
+		marker.MarkerCodeBlockNewline: true,
+	}
 	for _, r := range input + decoded {
 		used[r] = true
 	}

@@ -98,7 +98,7 @@ func (conv *Converter) ConvertNode(doc *html.Node, opts ...ConvertOptionFunc) ([
 
 	// - - - - - - - - - - - - - - - - - - - //
 
-	restoreMarkers, cleanupMarkers := protectInputMarkers(doc)
+	restoreMarkers, cleanupMarkers := protectInputMarkers(doc, option.domain)
 	defer cleanupMarkers()
 
 	// Pre-Render
