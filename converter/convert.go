@@ -98,6 +98,9 @@ func (conv *Converter) ConvertNode(doc *html.Node, opts ...ConvertOptionFunc) ([
 
 	// - - - - - - - - - - - - - - - - - - - //
 
+	restoreMarkers, cleanupMarkers := protectInputMarkers(doc)
+	defer cleanupMarkers()
+
 	// Pre-Render
 	for _, handler := range conv.getPreRenderHandlers() {
 		handler.Value(customCtx, doc)
@@ -113,7 +116,7 @@ func (conv *Converter) ConvertNode(doc *html.Node, opts ...ConvertOptionFunc) ([
 		result = handler.Value(customCtx, result)
 	}
 
-	return result, nil
+	return restoreMarkers(result), nil
 }
 
 // ConvertReader converts the html from the reader to markdown.

@@ -5,6 +5,7 @@ import (
 
 	"github.com/JohannesKaufmann/html-to-markdown/v2/converter"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/internal/textutils"
+	"github.com/JohannesKaufmann/html-to-markdown/v2/marker"
 	"golang.org/x/net/html"
 )
 
@@ -21,6 +22,10 @@ func (c *commonmark) renderBlockquote(ctx converter.Context, w converter.Writer,
 	content = textutils.TrimConsecutiveNewlines(content)
 	content = textutils.TrimUnnecessaryHardLineBreaks(content)
 	content = textutils.PrefixLines(content, []byte{'>', ' '})
+	// Keep protected code newlines intact until post-render, but prefix their
+	// following lines just like ordinary newlines (including nested quotes).
+	content = bytes.ReplaceAll(content, marker.BytesMarkerCodeBlockNewline,
+		append(append([]byte{}, marker.BytesMarkerCodeBlockNewline...), '>', ' '))
 
 	w.WriteRune('\n')
 	w.WriteRune('\n')

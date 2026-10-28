@@ -362,6 +362,18 @@ This library does NOT sanitize untrusted content. Use an HTML sanitizer such as 
 
 🗒️ [SECURITY.md](/SECURITY.md) if you find a security vulnerability
 
+### Lazy-loaded images and code tables
+
+Images use `src` when it is nonempty. Otherwise, the converter tries `data-src`,
+`data-original`, and `data-lazy-src`, in that order. Relative URLs, alt text,
+and titles are handled in the same way as ordinary images.
+
+Two-column syntax-highlighter tables with `gutter` and `code` cells are converted
+to a single code block when the gutter contains consecutive line numbers matching
+the number of code lines. Other tables keep their normal behavior. Tables containing
+`pre` blocks fall back to block content rather than placing fenced code inside
+Markdown table cells, even when the table newline option is `preserve`.
+
 ### Goroutines
 
 You can use the `Converter` from (multiple) goroutines. Internally a mutex is used & there is a test to verify that behaviour.

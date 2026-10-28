@@ -32,6 +32,10 @@ func hasProblematicChildNode(node *html.Node) bool {
 			// This will be caught with the newline check anyway.
 			// But we can safe some effort by aborting early...
 			return true
+		case "pre":
+			// Fenced blocks cannot be embedded in pipe-table cells. Their
+			// protected newlines would otherwise bypass the newline check.
+			return true
 		case "hr", "ul", "ol", "blockquote":
 			return true
 		}

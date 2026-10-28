@@ -35,6 +35,9 @@ func nameIsPre(node *html.Node) bool {
 	return name == "pre"
 }
 func nameIsInlineCode(node *html.Node) bool {
+	if domutils.IsInsidePre(node) {
+		return false
+	}
 	name := dom.NodeName(node)
 	return name == "code" || name == "var" || name == "samp" || name == "kbd" || name == "tt"
 }
@@ -62,6 +65,7 @@ func nameIsHeading(node *html.Node) bool {
 
 func (c *commonmark) handlePreRender(ctx converter.Context, doc *html.Node) {
 	domutils.RenameFakeSpans(ctx, doc)
+	unwrapCodeTables(doc)
 
 	// domutils.SplitUp(ctx, doc, nameIsBoldOrItalic, nameIsLink, atom.Span)
 

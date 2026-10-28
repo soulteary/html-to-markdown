@@ -28,8 +28,14 @@ func escapeAlt(altString string) string {
 }
 
 func (c *commonmark) renderImage(ctx converter.Context, w converter.Writer, n *html.Node) converter.RenderStatus {
-	src := dom.GetAttributeOr(n, "src", "")
-	src = strings.TrimSpace(src)
+	// Prefer the standard source; lazy-loading attributes are fallbacks only.
+	var src string
+	for _, attr := range []string{"src", "data-src", "data-original", "data-lazy-src"} {
+		src = strings.TrimSpace(dom.GetAttributeOr(n, attr, ""))
+		if src != "" {
+			break
+		}
+	}
 	if src == "" {
 		return converter.RenderTryNext
 	}
