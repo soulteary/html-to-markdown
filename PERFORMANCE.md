@@ -81,3 +81,32 @@ from a representative production corpus. Both revisions used Go 1.27.3, so the
 comparison measures the code changes rather than a Go toolchain upgrade. The
 small-fragment `Fresh` case improved only about 3%; the dense punctuation case
 must not be used to claim a twofold improvement for all HTML documents.
+
+## URL marker replacer follow-up
+
+URL marker encoding now reuses one package-level `strings.Replacer`, which is
+safe for concurrent calls. Only the fixed percent-encoding mappings are shared;
+marker restoration still uses each document's own tokens before URL assembly.
+The existing `Links` benchmark exercises this path with 200 links and images.
+
+A follow-up comparison used Apple M5 / darwin-arm64 and Go 1.27.3 throughout.
+The pre-fix fork was `9c1f65d`; upstream was
+`290df46a279e3d7d9011dbbb199658dfcb5ec272`. A separate comparison module linked
+both repositories, used the same six input generators, and checked identical
+output before timing. Full-module comparisons alternated upstream/fork order
+for five rounds with 250 ms minimum samples. A three-way link comparison also
+included the pre-fix fork, rotating the order for seven 300 ms rounds.
+
+For the three-way `Links/Reuse` workload, median allocation changed from
+983,055 to 681,338 bytes/op (about 31% less), and from 14,772 to 11,953
+allocations/op (about 19% less). Upstream used 689,823 bytes/op and 12,757
+allocations/op in the same run. The previous excess allocation is removed.
+
+The full comparison measured `Links/Reuse` at 1.334 ms upstream and 1.311 ms
+for the fixed fork, effectively similar performance on this machine. Dense
+Markdown text retained an approximately twofold speed advantage. Other timing
+results varied substantially between runs, including table workloads, so these
+measurements do not establish a uniform speed improvement over upstream.
+Allocation figures were more consistent than timing. All six compared workload
+outputs matched; this does not imply equivalence for inputs covered by the
+fork's additional rendering fixes.

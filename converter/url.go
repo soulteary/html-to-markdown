@@ -3,6 +3,15 @@ package converter
 import (
 	"net/url"
 	"strings"
+
+	"github.com/soulteary/html-to-markdown/v2/marker"
+)
+
+// Replacer is safe for concurrent use. These mappings are fixed; document-
+// specific marker restoration must still happen before this encoding step.
+var urlMarkerReplacer = strings.NewReplacer(
+	string(marker.MarkerEscaping), "%07",
+	string(marker.MarkerCodeBlockNewline), "%EF%80%82",
 )
 
 var percentEncodingReplacer = strings.NewReplacer(
