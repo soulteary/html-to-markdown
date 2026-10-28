@@ -11,7 +11,7 @@ import (
 	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/commonmark"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/strikethrough"
 	"github.com/JohannesKaufmann/html-to-markdown/v2/plugin/table"
-	"github.com/andybalholm/cascadia"
+	"github.com/soulteary/cascadia"
 	"golang.org/x/net/html"
 )
 

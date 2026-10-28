@@ -7,7 +7,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/andybalholm/cascadia"
+	"github.com/soulteary/cascadia"
 )
 
 // selectorFlag sets up a flag that parses a CSS selector string into a cascadia.Selector.
