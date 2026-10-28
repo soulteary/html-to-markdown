@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/andybalholm/cascadia"
+	"github.com/soulteary/cascadia"
 )
 
 var (
