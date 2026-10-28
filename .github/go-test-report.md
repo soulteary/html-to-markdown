@@ -4,8 +4,8 @@
 
 | Metric | Value |
 | --- | --- |
-| Total | 136 |
-| Passed | 136 |
+| Total | 137 |
+| Passed | 137 |
 | Failed | 0 |
 | Skipped | 0 |
 | Coverage | 86.49% |
@@ -15,7 +15,7 @@
 
 | Package | Status | Tests | Failed | Coverage |
 | --- | --- | --- | --- | --- |
-| . | pass | 17 | 0 | 100.00% |
+| . | pass | 18 | 0 | 100.00% |
 | collapse | pass | 10 | 0 | 100.00% |
 | converter | pass | 15 | 0 | 75.80% |
 | examples/basics | pass | 1 | 0 | 20.00% |

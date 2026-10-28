@@ -1,10 +1,10 @@
 # Go Report Card
 
-**Grade: A+** (99.3%)
+**Grade: A+** (99.4%)
 
 | Metric | Value |
 | ------ | ----- |
-| Files | 144 |
+| Files | 145 |
 | Issues | 11 |
 
 ## Checks
@@ -40,23 +40,27 @@
 
 ### misspell
 
+- `.github/goreportcard-report.md`
+  - Line 44: "seperates" is a misspelling of "separates"
+  - Line 46: "continously" is a misspelling of "continuously"
+  - Line 48: "seperated" is a misspelling of "separated"
+  - Line 50: "overriden" is a misspelling of "overridden"
+  - Line 52: "continously" is a misspelling of "continuously"
+  - Line 53: "seperates" is a misspelling of "separates"
+  - Line 54: "seperated" is a misspelling of "separated"
+  - Line 55: "overriden" is a misspelling of "overridden"
+  - Line 56: "seperates" is a misspelling of "separates"
+  - Line 57: "continously" is a misspelling of "continuously"
+  - Line 58: "seperated" is a misspelling of "separated"
+  - Line 59: "overriden" is a misspelling of "overridden"
 - `internal/domutils/list_end_comment.go`
   - Line 59: "seperates" is a misspelling of "separates"
 - `internal/domutils/neighbors.go`
   - Line 30: "continously" is a misspelling of "continuously"
-- `plugin/commonmark/render_image.go`
-  - Line 62: "seperated" is a misspelling of "separated"
 - `plugin/commonmark/validation.go`
   - Line 24: "overriden" is a misspelling of "overridden"
-- `.github/goreportcard-report.md`
-  - Line 44: "continously" is a misspelling of "continuously"
-  - Line 45: "seperates" is a misspelling of "separates"
-  - Line 46: "seperated" is a misspelling of "separated"
-  - Line 47: "overriden" is a misspelling of "overridden"
-  - Line 49: "seperates" is a misspelling of "separates"
-  - Line 51: "continously" is a misspelling of "continuously"
-  - Line 53: "seperated" is a misspelling of "separated"
-  - Line 55: "overriden" is a misspelling of "overridden"
+- `plugin/commonmark/render_image.go`
+  - Line 62: "seperated" is a misspelling of "separated"
 
 ---
 
