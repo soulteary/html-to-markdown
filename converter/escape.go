@@ -19,6 +19,10 @@ func (conv *Converter) escapeContent(chars []byte) []byte {
 		return chars
 	}
 
+	// Read the escape set under one lock instead of locking for every byte.
+	conv.m.RLock()
+	defer conv.m.RUnlock()
+
 	newChars := make([]byte, 0, len(chars))
 	for index := 0; index < len(chars); index++ {
 		if chars[index] == '\u0000' {
@@ -29,7 +33,7 @@ func (conv *Converter) escapeContent(chars []byte) []byte {
 
 		r, _ := utf8.DecodeRune(chars[index:])
 
-		isMarkdownChar := conv.checkIsEscapedChar(r)
+		_, isMarkdownChar := conv.markdownChars[r]
 		if isMarkdownChar {
 			newChars = append(newChars, placeholderByte, chars[index])
 		} else {
@@ -45,8 +49,15 @@ func (conv *Converter) unEscapeContent(chars []byte) []byte {
 		return chars
 	}
 
+	// Most table cells contain no markers. Load the snapshot only when needed.
+	var handlers prioritizedSlice[HandleUnEscapeFunc]
+	loaded := false
 	checkElements := func(index int) int {
-		for _, handler := range conv.getUnEscapeHandlers() {
+		if !loaded {
+			handlers = conv.getUnEscapeHandlers()
+			loaded = true
+		}
+		for _, handler := range handlers {
 			if skip := handler.Value(chars, index); skip != -1 {
 				return skip
 			}

@@ -10,7 +10,7 @@ configurable plugins, and custom element renderers.
 This is an independently maintained fork of
 [JohannesKaufmann/html-to-markdown](https://github.com/JohannesKaufmann/html-to-markdown).
 The module path is `github.com/soulteary/html-to-markdown/v2`.
-Go 1.25 or newer is required. The only direct external dependency is
+Go 1.27.3 or newer is required. The only direct external dependency is
 `golang.org/x/net`, used for HTML parsing.
 
 ## Install
@@ -144,6 +144,11 @@ are compared byte-for-byte; updates are explicit and should be reviewed.
 [Contributing](CONTRIBUTING.md) documents tests, fixture updates, and repository
 layout. CI builds and tests the library and examples on Linux, macOS, and Windows
 with the minimum supported Go version and the current stable version.
+
+For batch conversions, reuse a configured `converter.Converter` rather than
+calling the root convenience functions for every document. See
+[Performance](PERFORMANCE.md) for converter reuse, benchmark workloads, and
+repeatable measurement commands.
 
 ## Quality reports
 

@@ -6,3 +6,6 @@
 
 # Raw quality reports are uploaded as CI artifacts.
 .github/test-results/
+
+# Local performance profiles.
+*.pprof
