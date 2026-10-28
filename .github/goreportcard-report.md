@@ -1,11 +1,11 @@
 # Go Report Card
 
-**Grade: A+** (99.2%)
+**Grade: A+** (99.1%)
 
 | Metric | Value |
 | ------ | ----- |
-| Files | 159 |
-| Issues | 12 |
+| Files | 161 |
+| Issues | 13 |
 
 ## Checks
 
@@ -29,27 +29,26 @@
 
 ### gocyclo
 
+- `plugin/commonmark/code_tables.go`
+  - Line 22: cyclomatic complexity 32 for function unwrapCodeTables
+- `converter/input_markers.go`
+  - Line 18: cyclomatic complexity 25 for function protectInputMarkers
 - `plugin/commonmark/render_code.go`
   - Line 115: cyclomatic complexity 23 for function getCodeWithoutTags
 - `collapse/collapse.go`
   - Line 106: cyclomatic complexity 22 for function Collapse
 - `collapse/whitespace.go`
   - Line 12: cyclomatic complexity 21 for function replaceAnyWhitespaceWithSpace
-- `plugin/commonmark/code_tables.go`
-  - Line 22: cyclomatic complexity 32 for function unwrapCodeTables
-- `converter/input_markers.go`
-  - Line 18: cyclomatic complexity 25 for function protectInputMarkers
+- `docs/benchmarks/v2.0.1-upstream/comparison_test.go`
+  - Line 35: cyclomatic complexity 17 for function BenchmarkV201VsUpstream
 
 ### misspell
 
-- `internal/domutils/neighbors.go`
-  - Line 30: "continously" is a misspelling of "continuously"
 - `plugin/commonmark/render_image.go`
   - Line 62: "seperated" is a misspelling of "separated"
 - `plugin/commonmark/validation.go`
   - Line 24: "overriden" is a misspelling of "overridden"
 - `.github/goreportcard-report.md`
-  - Line 44: "seperates" is a misspelling of "separates"
   - Line 46: "continously" is a misspelling of "continuously"
   - Line 48: "seperated" is a misspelling of "separated"
   - Line 50: "overriden" is a misspelling of "overridden"
@@ -57,24 +56,31 @@
   - Line 53: "continously" is a misspelling of "continuously"
   - Line 54: "seperated" is a misspelling of "separated"
   - Line 55: "overriden" is a misspelling of "overridden"
-  - Line 56: "continously" is a misspelling of "continuously"
-  - Line 57: "seperates" is a misspelling of "separates"
+  - Line 56: "seperates" is a misspelling of "separates"
+  - Line 57: "continously" is a misspelling of "continuously"
   - Line 58: "seperated" is a misspelling of "separated"
   - Line 59: "overriden" is a misspelling of "overridden"
-  - Line 60: "seperates" is a misspelling of "separates"
-  - Line 61: "continously" is a misspelling of "continuously"
+  - Line 60: "continously" is a misspelling of "continuously"
+  - Line 61: "seperates" is a misspelling of "separates"
   - Line 62: "seperated" is a misspelling of "separated"
   - Line 63: "overriden" is a misspelling of "overridden"
   - Line 64: "seperates" is a misspelling of "separates"
   - Line 65: "continously" is a misspelling of "continuously"
-  - Line 66: "overriden" is a misspelling of "overridden"
-  - Line 67: "seperated" is a misspelling of "separated"
+  - Line 66: "seperated" is a misspelling of "separated"
+  - Line 67: "overriden" is a misspelling of "overridden"
   - Line 68: "seperates" is a misspelling of "separates"
   - Line 69: "continously" is a misspelling of "continuously"
-  - Line 70: "seperated" is a misspelling of "separated"
-  - Line 71: "overriden" is a misspelling of "overridden"
+  - Line 70: "overriden" is a misspelling of "overridden"
+  - Line 71: "seperated" is a misspelling of "separated"
+  - Line 72: "seperates" is a misspelling of "separates"
+  - Line 73: "continously" is a misspelling of "continuously"
+  - Line 74: "seperated" is a misspelling of "separated"
+  - Line 75: "overriden" is a misspelling of "overridden"
+  - Line 77: "seperates" is a misspelling of "separates"
 - `internal/domutils/list_end_comment.go`
   - Line 59: "seperates" is a misspelling of "separates"
+- `internal/domutils/neighbors.go`
+  - Line 30: "continously" is a misspelling of "continuously"
 
 ---
 
